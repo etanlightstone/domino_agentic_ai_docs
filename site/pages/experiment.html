@@ -96,26 +96,9 @@
 
   </div>
 
-  <div class="changed" data-change-label="New section &mdash; deploy from experiment run with lineage tracking">
-    <h2>Deploy from an experiment run</h2>
+  <h2>Deploy from an experiment run</h2>
 
-    <p>You can deploy an agent directly from any experiment run that originated from a Job. This guarantees lineage between development and production &mdash; Domino tracks which code commit, agent configuration, and evaluation results produced the deployed agent.</p>
-
-    <ol>
-      <li>In the experiment view, find the run you want to deploy.</li>
-      <li>Click the <strong>&hellip;</strong> menu on the right side of the run row.</li>
-      <li>Select <strong>Deploy</strong> (or <strong>Launch</strong>) to open the deployment wizard.</li>
-      <li>The wizard pre-fills the code commit from the selected run. Specify the entrypoint for your agent (typically <code>app.sh</code>).</li>
-    </ol>
-
-    <div class="diagram">
-      <img src="../assets/deploy_button.jpg" alt="Deploy button on an experiment run — shows the three-dot menu on a run row with the Deploy/Launch option.">
-    </div>
-
-    <div class="info">
-      <p><strong>Lineage tracking:</strong> When you deploy from an experiment run, Domino automatically links the production agent back to the experiment, including the exact code commit, YAML configuration, all traces, and aggregated evaluation results. This chain of evidence is visible in both the experiment view and the agent dashboard.</p>
-    </div>
-  </div>
+  <p>Once you've identified a winning configuration, you can deploy it to production directly from the Experiment Manager. Only runs that originated from a Job are eligible for deployment &mdash; Domino uses the Job's code commit and agent config to maintain full lineage from experiment to production. See <a href="deploy.html">Deploy agentic systems</a> for the step-by-step walkthrough.</p>
 
   <h2>Manual annotations</h2>
 
@@ -127,6 +110,12 @@
   </ul>
 
   <p>Manual annotations appear alongside automated evaluation scores in the comparison views.</p>
+
+  <h2>Programmatic trace analysis</h2>
+
+  <p>Beyond the Experiment Manager UI, you can pull trace data programmatically using the MLflow APIs for custom aggregation and analysis &mdash; for example, breaking down token usage, latency, and tool calls by span type, or building custom comparison visualizations in a notebook.</p>
+
+  <p>This is useful when you outgrow the built-in dashboards and want to do your own analytical work with the trace data. See the <a href="https://github.com/dominodatalab/rag-agent-demo">rag-agent-demo</a> repository for a notebook example that demonstrates pulling span-level metrics and visualizing them.</p>
 
   <h2>Export results</h2>
 
@@ -142,6 +131,7 @@
     <div class="next-link"><a href="deploy.html">Deploy agentic systems</a> &mdash; Production deployment details and configuration</div>
     <div class="next-link"><a href="monitor.html">Monitor agentic systems</a> &mdash; Track production performance</div>
     <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Iterate on instrumentation and evaluation</div>
+    <div class="next-link"><a href="sdk-reference.html">Python SDK: Agents</a> &mdash; Full API reference for tracing, evaluation, and trace search</div>
   </div>
 
 </main>

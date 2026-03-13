@@ -57,16 +57,18 @@
     </div>
 
     <ol>
-      <li><strong>Develop</strong> in a <strong>Domino Workspace</strong>. Write your agent code using any framework, add <code>@add_tracing</code> with inline evaluators to instrument it, and prepare test data for your agent configuration.</li>
-      <li><strong>Evaluate</strong> by running your evaluation script as a <strong>Domino Job</strong>. Each Job creates an experiment run in the Experiment Manager, capturing traces with evaluation scores for your agent configuration. Runs aggregate evaluation results across all traces.</li>
-      <li><strong>Compare and deploy</strong> in the <strong>Experiment Manager</strong>. Compare runs (different agent versions/configurations) and individual traces within runs. Deploy directly from any experiment run that originated from a Job &mdash; Domino tracks full lineage between dev and production (commit, agent config, and performance results).</li>
-      <li><strong>Monitor</strong> in <strong>production</strong>. The same <code>@add_tracing</code> instrumentation captures live user interactions as traces. Schedule evaluation Jobs to continuously score production traces and iterate when quality drops.</li>
+      <li><strong><a href="pages/llm-setup.html">Set up LLM access</a></strong>. Connect to your LLM provider of choice &mdash; an external API (OpenAI, Anthropic, Bedrock, Azure) or a Domino-hosted model. Store credentials as Domino environment variables.</li>
+      <li><strong><a href="pages/develop.html">Develop</a></strong> in a <strong>Domino Workspace</strong>. Write your agent code using any framework, add <code>@add_tracing</code> with inline evaluators to instrument it, and prepare test data for your agent configuration.</li>
+      <li><strong><a href="pages/develop.html#step-3">Evaluate</a></strong> by running your evaluation script as a <strong>Domino Job</strong>. Each Job creates an experiment run in the Experiment Manager, capturing traces with evaluation scores for your agent configuration. Runs aggregate evaluation results across all traces.</li>
+      <li><strong><a href="pages/experiment.html">Compare and deploy</a></strong> in the <strong>Experiment Manager</strong>. Compare runs (different agent versions/configurations) and individual traces within runs. Deploy directly from any experiment run that originated from a Job &mdash; Domino tracks full lineage between dev and production (commit, agent config, and performance results).</li>
+      <li><strong><a href="pages/monitor.html">Monitor</a></strong> in the <strong>Agent Dashboard</strong>. The same <code>@add_tracing</code> instrumentation captures live user interactions as traces. Schedule evaluation Jobs to continuously score production traces and iterate when quality drops.</li>
     </ol>
 
-    <p>Your agents rely on LLM endpoints to process requests &mdash; see <a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> for setting up that infrastructure. For conceptual background on what makes a system agentic, see <a href="pages/overview.html">Agentic AI overview</a>.</p>
+    <p>Your agents rely on LLM endpoints to process requests &mdash; you can connect to an external provider (OpenAI, Anthropic, Bedrock, Azure OpenAI) or host your own model in Domino. See <a href="pages/llm-setup.html">Set up LLM access</a> for both approaches. For conceptual background on what makes a system agentic, see <a href="pages/overview.html">Agentic AI overview</a>.</p>
 
     <div class="next-steps">
       <h2>Get started</h2>
+      <div class="next-link"><a href="pages/llm-setup.html">Set up LLM access</a> &mdash; Connect to an external provider or host your own model in Domino</div>
       <div class="next-link"><a href="pages/develop.html">Develop agentic systems</a> &mdash; Instrument your code, add evaluators, and run as a Job</div>
       <div class="next-link"><a href="pages/experiment.html">Experiment Manager</a> &mdash; Compare agent configurations and deploy to production</div>
       <div class="next-link"><a href="pages/deploy.html">Deploy agentic systems</a> &mdash; Production deployment details</div>

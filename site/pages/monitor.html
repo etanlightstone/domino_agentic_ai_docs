@@ -44,31 +44,67 @@
     </tbody>
   </table>
 
+  <p>The agent dashboard gives you an at-a-glance view of production performance, including evaluation metrics over time and a list of recent traces:</p>
+
+  <div class="diagram">
+    <img src="../assets/agent_dash.jpg" alt="Agent monitoring dashboard showing evaluation metrics, trace counts, and performance trends over time.">
+  </div>
+
+  <p>Click any trace to inspect the full execution path &mdash; every LLM call, tool invocation, and decision point, along with inputs, outputs, and evaluation scores:</p>
+
+  <div class="diagram">
+    <img src="../assets/agent_trace.jpg" alt="Trace detail view showing the span tree for a single agent interaction, with inputs, outputs, and timing for each step.">
+  </div>
+
   <h2>Evaluate production traces</h2>
 
-  <p>Run evaluations against production traces to continuously monitor your agent's quality. Use the same evaluation methods you used during experimentation: manual UI annotations, inline evaluators, or ad-hoc evaluation scripts.</p>
+  <p>Production evaluations run <strong>out of band</strong> from your real-time agent app. Rather than evaluating inside the live request path, you write a separate evaluation script that fetches production traces, scores them, and logs the results back. This script runs as a <a href="https://docs.dominodatalab.com/en/cloud/user_guide/942549/work-with-jobs/">Domino Job</a> &mdash; typically on a <a href="https://docs.dominodatalab.com/en/cloud/user_guide/5dce1f/schedule-jobs/">schedule</a> &mdash; so your agent's latency is never affected by evaluation overhead.</p>
 
-  <p>The most effective approach is to run evaluations as <a href="https://docs.dominodatalab.com/en/cloud/user_guide/942549/work-with-jobs/">Domino Jobs</a>. This lets you version and reproduce evaluations, and you can <a href="https://docs.dominodatalab.com/en/cloud/user_guide/5dce1f/schedule-jobs/">schedule Jobs</a> to continuously monitor your agent's quality as it handles user requests.</p>
+  <div class="info">
+    <p><strong>How it works:</strong> Your agent serves users in real time and collects traces automatically. A separate scheduled Job fetches those traces, runs your evaluation logic, and logs scores back to each trace. This gives you continuous quality monitoring without impacting production performance.</p>
+  </div>
 
-  <div class="changed" data-change-label="New &mdash; programmatic trace search via search_agent_traces() from SDK">
-    <h3>Searching production traces programmatically</h3>
+  <h3>Finding your agent ID and version</h3>
 
-    <p>Use <code>search_agent_traces()</code> to find traces from a specific deployed agent version. This enables programmatic monitoring and analysis:</p>
+  <p>To fetch production traces programmatically, you need the <strong>agent ID</strong> and <strong>agent version</strong>. Find these in the Domino UI after deploying your agent:</p>
+
+  <div class="diagram">
+    <img src="../assets/production_evals_info.jpg" alt="Domino agent dashboard showing the agent ID and version fields, which are needed for programmatic trace search.">
+  </div>
+
+  <h3>Production evaluation script</h3>
+
+  <p>Use <code>search_agent_traces()</code> to fetch traces for a specific agent version, then evaluate and log results back with <code>log_evaluation()</code>:</p>
 
 <pre><code><span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> search_agent_traces
+<span class="kw">from</span> domino.agents.logging <span class="kw">import</span> log_evaluation
 
-response = search_agent_traces(
-    agent_id=<span class="str">"your-agent-id"</span>,
-    agent_version=<span class="str">"1.0"</span>,
-    trace_name=<span class="str">"prioritize_ticket"</span>,
-    max_results=<span class="str">50</span>
+AGENT_ID = <span class="str">"69432f1be3cd202576bec1b1"</span>
+VERSION = <span class="str">"69b42b68746e4f13257c492b"</span>
+
+<span class="cm"># 1. Fetch traces for this agent version</span>
+traces = search_agent_traces(
+    agent_id=AGENT_ID,
+    agent_version=VERSION,
 )
 
-<span class="kw">for</span> trace <span class="kw">in</span> response.data:
-    print(trace.name, len(trace.spans), <span class="str">"spans"</span>)
-    <span class="kw">for</span> result <span class="kw">in</span> trace.evaluation_results:
-        print(f<span class="str">"  {result.name}: {result.value}"</span>)</code></pre>
-  </div>
+<span class="cm"># 2. Evaluate each trace and log results</span>
+<span class="kw">for</span> trace <span class="kw">in</span> traces.data:
+    inputs = trace.spans[0].inputs
+    outputs = trace.spans[0].outputs
+
+    score = my_evaluate(inputs, outputs)
+
+    <span class="cm"># 3. Log evaluation results back to the trace</span>
+    log_evaluation(
+        trace_id=trace.id,
+        name=<span class="str">"my_eval_metric"</span>,
+        value=score,
+    )</code></pre>
+
+  <p>For a complete working example, see <a href="https://github.com/etanlightstone-domino/simple_domino_agent/blob/main/prod_eval_simplest_agent.py">prod_eval_simplest_agent.py</a> in the simple_domino_agent repository.</p>
+
+  <p>Schedule this script as a recurring Domino Job to continuously monitor quality as your agent handles real user requests.</p>
 
   <h2>Iterate on configurations</h2>
 
@@ -85,7 +121,8 @@ response = search_agent_traces(
   <div class="next-steps">
     <h2>Next steps</h2>
     <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Iterate on your agent configuration based on production insights</div>
-    <div class="next-link"><a href="experiment.html">Experiment tracking and traces</a> &mdash; Test improvements before redeploying</div>
+    <div class="next-link"><a href="experiment.html">Experiment Manager</a> &mdash; Test improvements before redeploying</div>
+    <div class="next-link"><a href="sdk-reference.html">Python SDK: Agents</a> &mdash; Full API reference for <code>search_agent_traces</code>, <code>log_evaluation</code>, and trace data classes</div>
   </div>
 
 </main>

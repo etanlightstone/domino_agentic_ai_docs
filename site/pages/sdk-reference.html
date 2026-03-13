@@ -196,6 +196,25 @@
     </tbody>
   </table>
 
+  <h2>log_evaluation</h2>
+
+<pre><code>domino.agents.logging.<span class="fn">log_evaluation</span>(
+    trace_id: <span class="kw">str</span>,
+    name: <span class="kw">str</span>,
+    value: <span class="kw">float</span> | <span class="kw">str</span>
+)</code></pre>
+
+  <p>Log an evaluation result against an existing trace. Used for ad-hoc or production evaluations where you evaluate traces after they've been collected (e.g., in a scheduled Job).</p>
+
+  <table>
+    <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>trace_id</code></td><td><code>str</code></td><td>The MLflow trace ID to attach the evaluation to.</td></tr>
+      <tr><td><code>name</code></td><td><code>str</code></td><td>Name of the evaluation metric.</td></tr>
+      <tr><td><code>value</code></td><td><code>float | str</code></td><td>Evaluation result value (numeric score or string label).</td></tr>
+    </tbody>
+  </table>
+
   <h2>DominoRun</h2>
 
   <p>The <code>DominoRun</code> wrapper from <code>domino.agents.logging</code> creates an MLflow experiment run that stores traces and logged parameters.</p>

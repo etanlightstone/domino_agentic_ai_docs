@@ -57,7 +57,7 @@
   <!-- LLM Endpoint box -->
   <rect x="630" y="80" width="180" height="56" rx="8" fill="#fff" stroke="#e2e8f0" filter="url(#shadow)"/>
   <text x="720" y="106" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">LLM Endpoint</text>
-  <text x="720" y="124" text-anchor="middle" font-size="9.5" fill="#64748b">Hosted via Domino Model APIs</text>
+  <text x="720" y="124" text-anchor="middle" font-size="9.5" fill="#64748b">External API or Domino-hosted</text>
 
   <!-- Arrow marker -->
   <defs>
@@ -127,9 +127,9 @@
     <rect x="486" y="318" width="185" height="5" clip-path="url(#c3)" fill="url(#grad-deploy)"/>
   </g>
   <text x="578" y="344" text-anchor="middle" font-size="12.5" font-weight="700" fill="#059669">DEPLOY</text>
-  <text x="578" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Experiment Manager</text>
+  <text x="578" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Experiment Manager + Agent Hosting</text>
   <text x="578" y="378" text-anchor="middle" font-size="10" fill="#475569">Compare runs + traces</text>
-  <text x="578" y="393" text-anchor="middle" font-size="10" fill="#475569">Deploy from exp run</text>
+  <text x="578" y="393" text-anchor="middle" font-size="10" fill="#475569">Deploy as Domino Agent</text>
   <text x="578" y="408" text-anchor="middle" font-size="10" fill="#475569">Full lineage tracked</text>
 
   <!-- Arrow deploy to monitor -->
@@ -141,7 +141,7 @@
     <rect x="694" y="318" width="185" height="5" clip-path="url(#c4)" fill="url(#grad-monitor)"/>
   </g>
   <text x="786" y="344" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e11d48">MONITOR</text>
-  <text x="786" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Production</text>
+  <text x="786" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Agent Dashboard</text>
   <text x="786" y="378" text-anchor="middle" font-size="10" fill="#475569">Live user traces</text>
   <text x="786" y="393" text-anchor="middle" font-size="10" fill="#475569">Scheduled eval Jobs</text>
   <text x="786" y="408" text-anchor="middle" font-size="10" fill="#475569">Same instrumentation</text>

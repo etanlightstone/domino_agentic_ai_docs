@@ -70,7 +70,7 @@ RUN pip install mlflow==3.2.0</code></pre>
 
   <p>Your evaluation script is the file you'll run as a Domino Job to test your agent against sample data. It needs three things: the <code>@add_tracing</code> decorator on the function that calls your agent, a <code>DominoRun</code> wrapper that groups traces into an experiment run with your agent config, and an <code>evaluator</code> function that scores each response.</p>
 
-  <p>Domino auto-instruments all <a href="https://mlflow.org/docs/3.3.2/genai/tracing/integrations/">MLflow-supported frameworks</a>. Pass your framework to <code>autolog_frameworks</code> &mdash; supported values include <code>langchain</code>, <code>pydantic_ai</code>, <code>openai</code>, <code>anthropic</code>, <code>llama_index</code>, and <a href="https://mlflow.org/docs/3.3.2/genai/tracing/integrations/">others</a>.</p>
+  <p>Domino auto-instruments all <a href="https://mlflow.org/docs/3.3.2/genai/tracing/integrations/">MLflow-supported frameworks</a>. Pass your framework to <code>autolog_frameworks</code> &mdash; supported values include <code>langchain</code>, <code>pydantic_ai</code>, <code>openai</code>, <code>anthropic</code>, <code>llama_index</code>, and <a href="https://mlflow.org/docs/3.3.2/genai/tracing/integrations/">others</a>. If auto-tracing doesn't capture all the steps you need, see <a href="#advanced">Advanced: Manual span instrumentation</a> below.</p>
 
   <p>Here's the structure of a complete evaluation script:</p>
 
@@ -143,7 +143,7 @@ config_path = <span class="str">"ai_system_config.yaml"</span>
     <p>The <code>AgentEvaluator</code> class in the example above is your own code &mdash; Domino does not prescribe a specific evaluation approach. Your evaluation library can use LLM-as-judge scoring, deterministic heuristics, embedding similarity, external APIs, or any combination. See the <a href="https://github.com/etanlightstone-domino/simple_domino_agent/blob/main/evaluation_library.py">example evaluation library</a> for a starting point.</p>
   </div>
 
-  <h2>Step 3: Run as a Domino Job</h2>
+  <h2 id="step-3">Step 3: Run as a Domino Job</h2>
 
   <p><strong>Run your evaluation script as a Domino Job.</strong> Running as a Job is what keeps lineage intact &mdash; Domino ties the experiment run to a specific code commit, YAML agent config, all traces, and aggregated evaluation results, and only Job-originated runs can be deployed to production.</p>
 
@@ -151,9 +151,14 @@ config_path = <span class="str">"ai_system_config.yaml"</span>
     <p>You can run your evaluation script from a workspace to gut-check results while developing, but to preserve full lineage and enable deployment from the run, run it as a Job. After pushing your file changes, you can conveniently kick off a Job directly from your workspace.</p>
   </div>
 
-  <div class="screenshot-placeholder">
-    <strong>Screenshot: Workspace with Run Job button</strong>
-    Shows the Domino workspace UI with the button to kick off a Job directly from the workspace session.
+  <div class="diagram">
+    <img src="../assets/run_job_button.jpg" alt="Domino workspace UI showing the Run Job button, which lets you kick off a Job directly from your workspace session.">
+  </div>
+
+  <p>Clicking the button opens a modal where you specify the script to run and the hardware tier. Select your evaluation script and confirm to launch the Job:</p>
+
+  <div class="diagram">
+    <img src="../assets/dev_eval_screenshot.jpg" alt="Job launch modal showing the evaluation script selected and hardware configuration options.">
   </div>
 
   <p>The idea is to run your agent against a <strong>dataset of sample queries</strong> that you maintain alongside your code. Each query produces a separate trace with its own evaluation scores. Together, these traces form a complete picture of how this agent configuration performs &mdash; and as you iterate on prompts, models, or tools, you re-run the same dataset to compare results.</p>
@@ -190,10 +195,45 @@ config_path = <span class="str">"ai_system_config.yaml"</span>
 
   </div>
 
+  <h2 id="advanced">Advanced: Manual span instrumentation</h2>
+
+  <p>The auto-tracing integrations listed above cover the most common frameworks. In some cases, however, your agent may include steps that auto-tracing doesn't capture &mdash; for example, custom tool calls, non-framework LLM API calls, or internal processing functions. For these, you can manually instrument spans using MLflow's <code>@mlflow.trace</code> decorator.</p>
+
+  <p>Manual spans work alongside auto-traced spans. Combine <code>@add_tracing</code> on your top-level function with <code>@mlflow.trace</code> on inner functions to get typed spans with structured metadata:</p>
+
+<pre><code><span class="kw">import</span> mlflow
+<span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> add_tracing
+
+<span class="dec">@mlflow.trace</span>(span_type=<span class="str">"TOOL"</span>, name=<span class="str">"fetch_weather"</span>)
+<span class="kw">def</span> <span class="fn">fetch_weather</span>(city):
+    <span class="cm">"""This function will appear as a TOOL span in the trace."""</span>
+    <span class="kw">return</span> call_weather_api(city)
+
+<span class="dec">@mlflow.trace</span>(span_type=<span class="str">"LLM"</span>, name=<span class="str">"custom_llm_call"</span>)
+<span class="kw">def</span> <span class="fn">call_custom_model</span>(prompt):
+    <span class="cm">"""This function will appear as an LLM span in the trace."""</span>
+    <span class="kw">return</span> requests.post(my_endpoint, json={<span class="str">"prompt"</span>: prompt}).json()
+
+<span class="dec">@add_tracing</span>(name=<span class="str">"my_agent"</span>, autolog_frameworks=[<span class="str">"openai"</span>])
+<span class="kw">def</span> <span class="fn">run_agent</span>(question):
+    weather = fetch_weather(<span class="str">"NYC"</span>)       <span class="cm"># manually traced as TOOL</span>
+    result = call_custom_model(question)  <span class="cm"># manually traced as LLM</span>
+    <span class="kw">return</span> result</code></pre>
+
+  <p>Available span types include <code>LLM</code>, <code>TOOL</code>, <code>RETRIEVER</code>, <code>CHAIN</code>, <code>AGENT</code>, and <code>EMBEDDING</code>. Typed spans enable filtering and specialized rendering in the Trace Explorer.</p>
+
+  <p>For full details on manual tracing, see the <a href="https://mlflow.org/docs/latest/genai/tracing/app-instrumentation/manual-tracing/">MLflow Manual Tracing documentation</a>.</p>
+
+  <div class="note">
+    <div class="note-title">Note</div>
+    <p>The Domino SDK is actively adding native support for span types in the <code>@add_tracing</code> decorator. Once available, you'll be able to assign span types directly without dropping down to the MLflow API. This section will be updated when that capability ships.</p>
+  </div>
+
   <div class="next-steps">
     <h2>Next steps</h2>
     <div class="next-link"><a href="experiment.html">Experiment Manager</a> &mdash; Compare runs, view traces, and deploy to production</div>
-    <div class="next-link"><a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> &mdash; Set up LLM infrastructure for your agents</div>
+    <div class="next-link"><a href="llm-setup.html">Set up LLM access</a> &mdash; Configure your LLM endpoints (external providers or Domino-hosted)</div>
+    <div class="next-link"><a href="sdk-reference.html">Python SDK: Agents</a> &mdash; Full API reference for <code>@add_tracing</code>, <code>DominoRun</code>, and trace search</div>
   </div>
 
 </main>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Set up LLM access | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <h1>Set up LLM access</h1>
+
+  <p class="lead">Your agentic system needs access to one or more LLM endpoints. Before you start developing, decide how your agent will reach the models it depends on. Domino supports two approaches: connecting to an external LLM provider or hosting a model inside Domino.</p>
+
+  <h2>Option A: Connect to an external LLM provider</h2>
+
+  <p>Most teams already have access to a managed LLM service. Your agent code calls the provider's API directly &mdash; Domino runs the agent, and the LLM inference happens outside Domino.</p>
+
+  <p>Common providers:</p>
+
+  <table>
+    <thead>
+      <tr><th>Provider</th><th>SDK / package</th><th>Typical env variable</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>OpenAI</td><td><code>openai</code></td><td><code>OPENAI_API_KEY</code></td></tr>
+      <tr><td>Anthropic</td><td><code>anthropic</code></td><td><code>ANTHROPIC_API_KEY</code></td></tr>
+      <tr><td>AWS Bedrock</td><td><code>boto3</code></td><td><code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code></td></tr>
+      <tr><td>Azure OpenAI</td><td><code>openai</code></td><td><code>AZURE_OPENAI_API_KEY</code>, <code>AZURE_OPENAI_ENDPOINT</code></td></tr>
+      <tr><td>Google Vertex AI</td><td><code>google-cloud-aiplatform</code></td><td>Service account credentials</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How to configure access in Domino</h3>
+
+  <ol>
+    <li><strong>Install the provider's SDK</strong> in your Domino environment. Add the package to your environment's Dockerfile instructions (e.g., <code>RUN pip install openai</code>) or install it in your workspace.</li>
+    <li><strong>Store API keys as Domino environment variables.</strong> In your project settings, add environment variables for your credentials. These are injected into workspaces and Jobs automatically &mdash; your code reads them at runtime via <code>os.environ</code>. This keeps secrets out of your code and version control.</li>
+    <li><strong>Use the provider's SDK in your agent code</strong> the same way you would locally. The provider handles model hosting, scaling, and versioning.</li>
+  </ol>
+
+<pre><code><span class="kw">import</span> os
+<span class="kw">from</span> openai <span class="kw">import</span> OpenAI
+
+<span class="cm"># API key is read from a Domino environment variable</span>
+client = OpenAI(api_key=os.environ[<span class="str">"OPENAI_API_KEY"</span>])
+
+response = client.chat.completions.create(
+    model=<span class="str">"gpt-4o"</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello"</span>}]
+)</code></pre>
+
+  <div class="info">
+    <p><strong>Swapping models during experimentation.</strong> One advantage of external providers is that switching models is a configuration change, not an infrastructure change. When you iterate on your agent during <a href="develop.html">development</a>, you can swap between models (e.g., GPT-4o vs. Claude 3.5) by changing a value in your YAML agent config &mdash; no redeployment needed.</p>
+  </div>
+
+  <h2>Option B: Host a model in Domino</h2>
+
+  <p>If you need to run your own model &mdash; for data residency, cost control, or to use a fine-tuned model &mdash; Domino can host it as a Model API. Your agent code calls the Domino-hosted endpoint the same way it would call any other API.</p>
+
+  <p>See <a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> for the full setup guide, including:</p>
+
+  <ul>
+    <li>Registering a model from Hugging Face or a custom checkpoint</li>
+    <li>Deploying it as a Domino Model API endpoint</li>
+    <li>Configuring GPU hardware and scaling</li>
+  </ul>
+
+  <h2>Mixing approaches</h2>
+
+  <p>Many production agents use both: an external frontier model for primary reasoning and a Domino-hosted model for specialized tasks (e.g., a fine-tuned classifier or embedding model). The instrumentation in the <a href="develop.html">Develop</a> step captures traces from all LLM calls regardless of where the model is hosted.</p>
+
+  <div class="next-steps">
+    <h2>Next steps</h2>
+    <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Instrument your agent code with tracing and evaluation</div>
+    <div class="next-link"><a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> &mdash; Host your own model in Domino</div>
+  </div>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>

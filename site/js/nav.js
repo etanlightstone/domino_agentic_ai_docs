@@ -3,6 +3,7 @@
     { heading: "Develop" },
     { label: "Build and evaluate agentic systems", href: "/index.html" },
     { label: "Agentic AI overview", href: "/pages/overview.html", sub: true },
+    { label: "Set up LLM access", href: "/pages/llm-setup.html", sub: true },
     { label: "Develop agentic systems", href: "/pages/develop.html", sub: true },
     { label: "Experiment Manager", href: "/pages/experiment.html", sub: true },
     { label: "Deploy agentic systems", href: "/pages/deploy.html", sub: true },
@@ -44,6 +45,22 @@
       group.querySelector("#" + btn.dataset.tab).classList.add("active");
     });
   });
+  // ─── Diff Mode Toggle ───
+  var topbar = document.querySelector(".topbar");
+  if (topbar && document.querySelectorAll(".changed").length > 0) {
+    var rightSection = document.createElement("div");
+    rightSection.className = "topbar-right";
+    var btn = document.createElement("button");
+    btn.className = "diff-toggle";
+    btn.innerHTML = '<span class="diff-toggle-dot"></span>Diff mode';
+    btn.addEventListener("click", function () {
+      document.body.classList.toggle("diff-mode");
+      btn.classList.toggle("active");
+    });
+    rightSection.appendChild(btn);
+    topbar.appendChild(rightSection);
+  }
+
   // ─── Change Tracking ───
   var tooltip = null;
 
