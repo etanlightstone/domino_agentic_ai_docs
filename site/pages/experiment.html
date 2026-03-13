@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="base-path" content="..">
-  <title>Experiment tracking and traces | Domino Docs</title>
+  <title>Experiment Manager | Domino Docs</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -25,86 +25,111 @@
 <aside class="sidebar" id="sidebar"></aside>
 
 <main class="content">
-  <h1>Experiment tracking and traces with agents</h1>
+  <div class="changed" data-change-label="Restructured &mdash; refocused on Experiment Manager UI; instrumentation moved to Develop page">
+    <template class="old-content">
+      <h1>Experiment tracking and traces with agents</h1>
+      <p>After instrumenting your agentic system, run experiments to test different configurations and evaluate quality. Domino captures traces from each run and lets you attach evaluations, compare results, and export findings.</p>
+      <h2>Log evaluations</h2>
+      <p>Log evaluations inline during execution or ad-hoc after traces are generated. The Domino instrumentation examples repository has working examples for both approaches.</p>
+      <p><strong>Inline:</strong> Pass an <code>evaluator</code> argument in the decorator to capture inputs and outputs of the decorated function. An evaluator is a function that receives the span and returns a dictionary of evaluation results.</p>
+      <p><strong>Ad-hoc:</strong> Run evaluations after traces have been collected. Use <code>search_traces()</code> to find traces from a run, then log evaluation results against them.</p>
+      <h2>Compare traces</h2>
+      <p>Compare runs to see how different configurations perform on the same inputs:</p>
+      <ol><li>From the experiment view, select two to four runs and click Compare.</li><li>Open the Traces comparison view in the Experiment Manager.</li><li>Review results across runs to spot patterns.</li></ol>
+      <h3>Export results</h3>
+      <p>Export data in two formats: CSV (click three dots in upper right) or PDF report (select runs to compare, click three dots).</p>
+    </template>
 
-  <p class="lead">After instrumenting your agentic system, run experiments to test different configurations and evaluate quality. Domino captures traces from each run and lets you attach evaluations, compare results, and export findings.</p>
+  <h1>Experiment Manager</h1>
 
-  <h2>View traces</h2>
+  <p class="lead">The Experiment Manager is where you compare agent configurations, review traces, and deploy the best version to production. Each time you <a href="develop.html">run an evaluation script as a Domino Job</a>, it creates an experiment run containing traces and evaluation scores for that configuration.</p>
 
-  <p>Once you have logged at least one run with traces, view and analyze them in the <strong>Experiments</strong> tab:</p>
+  <h2>How experiment runs are created</h2>
+
+  <p>Experiment runs are created when you run your evaluation script as a <strong>Domino Job</strong> (not from a workspace). Each run captures:</p>
+
+  <ul>
+    <li>The <strong>code commit</strong> used for the Job</li>
+    <li>The <strong>YAML agent configuration</strong> (model, prompts, parameters) logged via <code>DominoRun(agent_config_path=...)</code></li>
+    <li>All <strong>traces</strong> generated during execution, with inline evaluation scores</li>
+    <li><strong>Aggregated metrics</strong> across all traces in the run</li>
+  </ul>
+
+  <p>This means each run is a complete, versioned snapshot of an agent configuration and its performance. See <a href="develop.html">Develop agentic systems</a> for how to set up the instrumentation and evaluation code.</p>
+
+  <h2>View traces in a run</h2>
+
+  <p>View and analyze traces from any experiment run:</p>
 
   <ol>
+    <li>In your project, click <strong>Experiments</strong> in the left navigation.</li>
     <li>Find and click the experiment you want to review.</li>
     <li>Open a run and select the <strong>Traces</strong> tab.</li>
   </ol>
 
-  <p>When reviewing traces you can:</p>
-  <ul>
-    <li>See evaluations logged in code</li>
-    <li>Add metrics (float values) or labels (string values) by clicking <strong>Add Metric/Label</strong></li>
-    <li>Click any metric or label cell to open the detailed trace view</li>
-  </ul>
-
-  <h2>Log evaluations</h2>
-
-  <p>Log evaluations inline during execution or ad-hoc after traces are generated. The <a href="https://github.com/dominodatalab/domino-genai-instrumentation-example">Domino instrumentation examples repository</a> has working examples for both approaches.</p>
-
-  <div class="tab-group">
-    <div class="tab-buttons">
-      <button class="tab-btn active" data-tab="tab-inline">Inline</button>
-      <button class="tab-btn" data-tab="tab-adhoc">Ad-hoc</button>
-    </div>
-
-    <div id="tab-inline" class="tab-panel active">
-      <p>Pass an <code>evaluator</code> argument in the decorator to capture inputs and outputs of the decorated function. An evaluator is a function that receives the span and returns a dictionary of evaluation results.</p>
-
-<pre><code><span class="dec">@add_tracing</span>(
-    name=<span class="str">"prioritize_ticket"</span>,
-    autolog_frameworks=[<span class="str">"openai"</span>],
-    evaluator=judge_response  <span class="cm"># Span-level evaluator</span>
-)
-<span class="kw">def</span> <span class="fn">run_agent</span>(...):
-    ...</code></pre>
-
-      <div class="changed" data-change-label="New &mdash; trace_evaluator for end-to-end quality checks (from SDK insights)">
-        <p>You can also pass a <code>trace_evaluator</code> to evaluate the <em>entire trace</em> (not just individual spans). This is valuable for end-to-end quality checks. The trace evaluator fires when the trace was both started and finished by the decorated function.</p>
-
-<pre><code><span class="dec">@add_tracing</span>(
-    name=<span class="str">"prioritize_ticket"</span>,
-    autolog_frameworks=[<span class="str">"openai"</span>],
-    evaluator=judge_response,           <span class="cm"># Span-level</span>
-    trace_evaluator=check_end_to_end    <span class="cm"># Trace-level</span>
-)
-<span class="kw">def</span> <span class="fn">run_agent</span>(...):
-    ...</code></pre>
-      </div>
-    </div>
-
-    <div id="tab-adhoc" class="tab-panel">
-      <div class="changed" data-change-label="New &mdash; ad-hoc evaluation with search_traces() code example">
-        <p>Run evaluations after traces have been collected. Use <code>search_traces()</code> to find traces from a run, then log evaluation results against them. This is useful for batch evaluation with SME review or automated scoring pipelines.</p>
-
-<pre><code><span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> search_traces
-
-response = search_traces(run_id=<span class="str">"your-run-id"</span>, trace_name=<span class="str">"prioritize_ticket"</span>)
-<span class="kw">for</span> trace <span class="kw">in</span> response.data:
-    <span class="cm"># Evaluate each trace and log results</span>
-    ...</code></pre>
-      </div>
-    </div>
+  <div class="screenshot-placeholder">
+    <strong>Screenshot: Traces tab in an experiment run</strong>
+    Shows the list of traces with evaluation scores (toxicity, relevancy, accuracy) for each trace. Each row is clickable to open the detailed trace view.
   </div>
 
-  <h2>Compare traces</h2>
+  <p>When reviewing traces you can:</p>
+  <ul>
+    <li>See evaluation scores logged by your inline evaluators</li>
+    <li>Add metrics (float values) or labels (string values) by clicking <strong>Add Metric/Label</strong> for manual annotation</li>
+    <li>Click any metric or label cell to open the detailed trace view with the full span tree</li>
+  </ul>
 
-  <p>Compare runs to see how different configurations perform on the same inputs:</p>
+  <h2>Compare runs</h2>
+
+  <p>Compare different agent configurations (runs) to see how changes to prompts, models, or parameters affect quality:</p>
 
   <ol>
     <li>From the experiment view, select two to four runs and click <strong>Compare</strong>.</li>
-    <li>Open the <strong>Traces comparison</strong> view in the Experiment Manager.</li>
-    <li>Review results across runs to spot patterns. Click any metric or label cell to open the detailed trace view.</li>
+    <li>The comparison view shows aggregated metrics side by side for each run.</li>
+    <li>Open the <strong>Traces comparison</strong> view to compare individual traces across runs &mdash; this shows you exactly where one configuration outperforms another on the same inputs.</li>
   </ol>
 
-  <h3>Export results</h3>
+  <div class="screenshot-placeholder">
+    <strong>Screenshot: Run comparison view in Experiment Manager</strong>
+    Shows aggregated metrics for multiple runs side by side, with the Traces comparison tab for drilling into individual traces.
+  </div>
+
+  </div>
+
+  <div class="changed" data-change-label="New section &mdash; deploy from experiment run with lineage tracking">
+    <h2>Deploy from an experiment run</h2>
+
+    <p>You can deploy an agent directly from any experiment run that originated from a Job. This guarantees lineage between development and production &mdash; Domino tracks which code commit, agent configuration, and evaluation results produced the deployed agent.</p>
+
+    <ol>
+      <li>In the experiment view, find the run you want to deploy.</li>
+      <li>Click the <strong>&hellip;</strong> menu on the right side of the run row.</li>
+      <li>Select <strong>Deploy</strong> (or <strong>Launch</strong>) to open the deployment wizard.</li>
+      <li>The wizard pre-fills the code commit from the selected run. Specify the entrypoint for your agent (typically <code>app.sh</code>).</li>
+    </ol>
+
+    <div class="screenshot-placeholder">
+      <strong>Screenshot: Deploy button on an experiment run</strong>
+      Shows the three-dot menu on a run row with the Deploy/Launch option highlighted.
+    </div>
+
+    <div class="info">
+      <p><strong>Lineage tracking:</strong> When you deploy from an experiment run, Domino automatically links the production agent back to the experiment, including the exact code commit, YAML configuration, all traces, and aggregated evaluation results. This chain of evidence is visible in both the experiment view and the agent dashboard.</p>
+    </div>
+  </div>
+
+  <h2>Manual annotations</h2>
+
+  <p>Beyond automated evaluation scores, subject matter experts can manually annotate traces:</p>
+
+  <ul>
+    <li><strong>Metrics</strong> &mdash; Add numeric scores (float values) to any trace by clicking <strong>Add Metric/Label</strong>.</li>
+    <li><strong>Labels</strong> &mdash; Add string labels (e.g., "approved", "needs review", "hallucination") to categorize traces.</li>
+  </ul>
+
+  <p>Manual annotations appear alongside automated evaluation scores in the comparison views.</p>
+
+  <h2>Export results</h2>
 
   <p>Export data in two formats:</p>
 
@@ -115,8 +140,9 @@ response = search_traces(run_id=<span class="str">"your-run-id"</span>, trace_na
 
   <div class="next-steps">
     <h2>Next steps</h2>
-    <div class="next-link"><a href="deploy.html">Deploy agentic systems</a> &mdash; Launch your best configuration to production</div>
-    <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Return to instrumentation to refine your system</div>
+    <div class="next-link"><a href="deploy.html">Deploy agentic systems</a> &mdash; Production deployment details and configuration</div>
+    <div class="next-link"><a href="monitor.html">Monitor agentic systems</a> &mdash; Track production performance</div>
+    <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Iterate on instrumentation and evaluation</div>
   </div>
 
 </main>

@@ -1,131 +1,156 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 500" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 510" font-family="'Inter','Segoe UI',system-ui,sans-serif">
   <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0,0 L10,5 L0,10z" fill="#94A3B8"/>
-    </marker>
-    <marker id="arr-blue" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0,0 L10,5 L0,10z" fill="#2563EB"/>
-    </marker>
-    <marker id="arr-dash" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0,0 L10,5 L0,10z" fill="#64748B"/>
-    </marker>
-    <filter id="sh" x="-2%" y="-4%" width="104%" height="116%">
-      <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.07"/>
+    <linearGradient id="grad-traces" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="grad-dev" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="grad-eval" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="grad-deploy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="grad-monitor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="116%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity=".08"/>
     </filter>
-    <clipPath id="c1"><rect x="70" y="318" width="185" height="82" rx="8"/></clipPath>
-    <clipPath id="c2"><rect x="278" y="318" width="185" height="82" rx="8"/></clipPath>
-    <clipPath id="c3"><rect x="486" y="318" width="185" height="82" rx="8"/></clipPath>
-    <clipPath id="c4"><rect x="694" y="318" width="185" height="82" rx="8"/></clipPath>
+    <clipPath id="c1"><rect x="70" y="318" width="185" height="100" rx="8"/></clipPath>
+    <clipPath id="c2"><rect x="278" y="318" width="185" height="100" rx="8"/></clipPath>
+    <clipPath id="c3"><rect x="486" y="318" width="185" height="100" rx="8"/></clipPath>
+    <clipPath id="c4"><rect x="694" y="318" width="185" height="100" rx="8"/></clipPath>
   </defs>
 
+  <!-- Background -->
+  <rect width="940" height="510" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+
   <!-- Title -->
-  <text x="470" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#0F172A" letter-spacing="-0.2">Agentic Development Lifecycle in Domino</text>
+  <text x="470" y="34" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a" letter-spacing=".3">Agentic Development Workflow in Domino</text>
 
-  <!-- WHAT YOU BUILD -->
-  <text x="110" y="56" font-size="10" font-weight="700" fill="#94A3B8" letter-spacing="1.5">WHAT YOU BUILD</text>
+  <!-- WHAT YOU BUILD section -->
+  <text x="470" y="64" text-anchor="middle" font-size="10" font-weight="600" fill="#94a3b8" letter-spacing="1.5">WHAT YOU BUILD</text>
 
-  <!-- Agent Framework -->
-  <g filter="url(#sh)">
-    <rect x="110" y="68" width="210" height="86" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <!-- Agent Framework box -->
+  <rect x="130" y="80" width="180" height="56" rx="8" fill="#fff" stroke="#e2e8f0" filter="url(#shadow)"/>
+  <text x="220" y="106" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">Agent Framework</text>
+  <text x="220" y="124" text-anchor="middle" font-size="9.5" fill="#64748b">LangChain &#x00B7; Pydantic AI &#x00B7; OpenAI</text>
+
+  <!-- Arrow 1 -->
+  <line x1="310" y1="108" x2="360" y2="108" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+
+  <!-- Your Agent Logic box -->
+  <rect x="360" y="80" width="220" height="56" rx="8" fill="#fff" stroke="#e2e8f0" filter="url(#shadow)"/>
+  <text x="470" y="106" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">Your Agent Logic</text>
+  <text x="470" y="124" text-anchor="middle" font-size="9.5" fill="#64748b">Prompts &#x00B7; Tools &#x00B7; Memory &#x00B7; Routing</text>
+
+  <!-- Arrow 2 -->
+  <line x1="580" y1="108" x2="630" y2="108" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
+
+  <!-- LLM Endpoint box -->
+  <rect x="630" y="80" width="180" height="56" rx="8" fill="#fff" stroke="#e2e8f0" filter="url(#shadow)"/>
+  <text x="720" y="106" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">LLM Endpoint</text>
+  <text x="720" y="124" text-anchor="middle" font-size="9.5" fill="#64748b">Hosted via Domino Model APIs</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowGrey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrowWhite" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff"/>
+    </marker>
+  </defs>
+
+  <!-- @add_tracing badge -->
+  <rect x="358" y="152" width="224" height="28" rx="14" fill="#4f46e5"/>
+  <text x="470" y="170" text-anchor="middle" font-size="11" font-weight="600" fill="#fff" font-family="'SF Mono','Fira Code',monospace">@add_tracing</text>
+
+  <!-- Connector from badge to TRACES bar -->
+  <line x1="470" y1="180" x2="470" y2="200" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- TRACES bar -->
+  <rect x="70" y="200" width="800" height="40" rx="8" fill="url(#grad-traces)"/>
+  <text x="470" y="226" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" letter-spacing="2">TRACES</text>
+  <text x="470" y="224" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" dy="14">LLM calls &#x00B7; tool invocations &#x00B7; decisions &#x00B7; token usage &#x00B7; latency &#x00B7; cost</text>
+
+  <!-- Connector from TRACES to lifecycle -->
+  <line x1="470" y1="240" x2="470" y2="260" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- DOMINO WORKFLOW label -->
+  <text x="470" y="278" text-anchor="middle" font-size="10" font-weight="600" fill="#94a3b8" letter-spacing="1.5">DOMINO WORKFLOW</text>
+
+  <!-- Connecting lines from TRACES to each box -->
+  <line x1="162" y1="260" x2="162" y2="318" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="370" y1="260" x2="370" y2="318" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="578" y1="260" x2="578" y2="318" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="786" y1="260" x2="786" y2="318" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ======= DEVELOP box ======= -->
+  <g filter="url(#shadow)">
+    <rect x="70" y="318" width="185" height="100" rx="8" fill="#fff" stroke="#e2e8f0"/>
+    <rect x="70" y="318" width="185" height="5" clip-path="url(#c1)" fill="url(#grad-dev)"/>
   </g>
-  <text x="215" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#1E40AF">Agent Framework</text>
-  <text x="215" y="112" text-anchor="middle" font-size="10.5" fill="#3B82F6">LangChain &#x00B7; Pydantic AI</text>
-  <text x="215" y="126" text-anchor="middle" font-size="10.5" fill="#3B82F6">OpenAI Agents SDK &#x00B7; LlamaIndex</text>
+  <text x="162" y="344" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2563eb">DEVELOP</text>
+  <text x="162" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Domino Workspace</text>
+  <text x="162" y="378" text-anchor="middle" font-size="10" fill="#475569">Write agent code</text>
+  <text x="162" y="393" text-anchor="middle" font-size="10" fill="#475569">Add instrumentation</text>
+  <text x="162" y="408" text-anchor="middle" font-size="10" fill="#475569">Prepare test data</text>
 
-  <line x1="328" y1="111" x2="358" y2="111" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- Arrow dev to eval -->
+  <line x1="255" y1="368" x2="278" y2="368" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
 
-  <!-- Your Agent Logic -->
-  <g filter="url(#sh)">
-    <rect x="366" y="68" width="210" height="86" rx="8" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1"/>
+  <!-- ======= EVALUATE box ======= -->
+  <g filter="url(#shadow)">
+    <rect x="278" y="318" width="185" height="100" rx="8" fill="#fff" stroke="#e2e8f0"/>
+    <rect x="278" y="318" width="185" height="5" clip-path="url(#c2)" fill="url(#grad-eval)"/>
   </g>
-  <text x="471" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#5B21B6">Your Agent Logic</text>
-  <text x="471" y="112" text-anchor="middle" font-size="10.5" fill="#7C3AED">Prompts &#x00B7; Tools &#x00B7; Memory</text>
-  <text x="471" y="126" text-anchor="middle" font-size="10.5" fill="#7C3AED">Orchestration &#x00B7; Routing</text>
+  <text x="370" y="344" text-anchor="middle" font-size="12.5" font-weight="700" fill="#d97706">EVALUATE</text>
+  <text x="370" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Domino Jobs</text>
+  <text x="370" y="378" text-anchor="middle" font-size="10" fill="#475569">Run eval script as Job</text>
+  <text x="370" y="393" text-anchor="middle" font-size="10" fill="#475569">Creates experiment run</text>
+  <text x="370" y="408" text-anchor="middle" font-size="10" fill="#475569">Traces + evaluations</text>
 
-  <line x1="584" y1="111" x2="614" y2="111" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- Arrow eval to deploy -->
+  <line x1="463" y1="368" x2="486" y2="368" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
 
-  <!-- LLM Endpoint -->
-  <g filter="url(#sh)">
-    <rect x="622" y="68" width="210" height="86" rx="8" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1"/>
+  <!-- ======= DEPLOY box ======= -->
+  <g filter="url(#shadow)">
+    <rect x="486" y="318" width="185" height="100" rx="8" fill="#fff" stroke="#e2e8f0"/>
+    <rect x="486" y="318" width="185" height="5" clip-path="url(#c3)" fill="url(#grad-deploy)"/>
   </g>
-  <text x="727" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">LLM Endpoint</text>
-  <text x="727" y="112" text-anchor="middle" font-size="10.5" fill="#059669">Domino AI Gateway</text>
-  <text x="727" y="126" text-anchor="middle" font-size="10.5" fill="#059669">Self-hosted / External API</text>
+  <text x="578" y="344" text-anchor="middle" font-size="12.5" font-weight="700" fill="#059669">DEPLOY</text>
+  <text x="578" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Experiment Manager</text>
+  <text x="578" y="378" text-anchor="middle" font-size="10" fill="#475569">Compare runs + traces</text>
+  <text x="578" y="393" text-anchor="middle" font-size="10" fill="#475569">Deploy from exp run</text>
+  <text x="578" y="408" text-anchor="middle" font-size="10" fill="#475569">Full lineage tracked</text>
 
-  <!-- @add_tracing connector -->
-  <line x1="471" y1="162" x2="471" y2="216" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-blue)"/>
-  <rect x="411" y="176" width="120" height="24" rx="12" fill="#2563EB"/>
-  <text x="471" y="192" text-anchor="middle" font-size="11" font-weight="600" fill="#FFFFFF">@add_tracing</text>
+  <!-- Arrow deploy to monitor -->
+  <line x1="671" y1="368" x2="694" y2="368" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowGrey)"/>
 
-  <!-- TRACES BAR -->
-  <rect x="70" y="226" width="810" height="50" rx="8" fill="#0F172A"/>
-  <text x="475" y="248" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF" letter-spacing="4">T R A C E S</text>
-  <text x="475" y="265" text-anchor="middle" font-size="9" fill="#94A3B8">Every LLM call &#x00B7; tool invocation &#x00B7; decision point &#x00B7; token usage &#x00B7; latency &#x00B7; cost</text>
-
-  <!-- Dashed connectors from TRACES to lifecycle boxes -->
-  <line x1="162" y1="280" x2="162" y2="314" stroke="#2563EB" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
-  <line x1="370" y1="280" x2="370" y2="314" stroke="#7C3AED" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
-  <line x1="578" y1="280" x2="578" y2="314" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
-  <line x1="786" y1="280" x2="786" y2="314" stroke="#EA580C" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
-
-  <!-- DOMINO LIFECYCLE -->
-  <text x="70" y="305" font-size="10" font-weight="700" fill="#94A3B8" letter-spacing="1.5">DOMINO LIFECYCLE</text>
-
-  <!-- DEVELOP -->
-  <g filter="url(#sh)">
-    <g clip-path="url(#c1)">
-      <rect x="70" y="318" width="185" height="82" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
-      <rect x="70" y="318" width="185" height="4" fill="#2563EB"/>
-    </g>
+  <!-- ======= MONITOR box ======= -->
+  <g filter="url(#shadow)">
+    <rect x="694" y="318" width="185" height="100" rx="8" fill="#fff" stroke="#e2e8f0"/>
+    <rect x="694" y="318" width="185" height="5" clip-path="url(#c4)" fill="url(#grad-monitor)"/>
   </g>
-  <text x="162" y="348" text-anchor="middle" font-size="13" font-weight="700" fill="#1E40AF">DEVELOP</text>
-  <text x="162" y="366" text-anchor="middle" font-size="10.5" fill="#64748B">Instrument code</text>
-  <text x="162" y="380" text-anchor="middle" font-size="10.5" fill="#64748B">Capture &amp; debug traces</text>
+  <text x="786" y="344" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e11d48">MONITOR</text>
+  <text x="786" y="358" text-anchor="middle" font-size="9.5" font-weight="500" fill="#64748b" font-style="italic">Production</text>
+  <text x="786" y="378" text-anchor="middle" font-size="10" fill="#475569">Live user traces</text>
+  <text x="786" y="393" text-anchor="middle" font-size="10" fill="#475569">Scheduled eval Jobs</text>
+  <text x="786" y="408" text-anchor="middle" font-size="10" fill="#475569">Same instrumentation</text>
 
-  <line x1="262" y1="359" x2="272" y2="359" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- EXPERIMENT -->
-  <g filter="url(#sh)">
-    <g clip-path="url(#c2)">
-      <rect x="278" y="318" width="185" height="82" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
-      <rect x="278" y="318" width="185" height="4" fill="#7C3AED"/>
-    </g>
-  </g>
-  <text x="370" y="348" text-anchor="middle" font-size="13" font-weight="700" fill="#5B21B6">EXPERIMENT</text>
-  <text x="370" y="366" text-anchor="middle" font-size="10.5" fill="#64748B">Evaluate quality</text>
-  <text x="370" y="380" text-anchor="middle" font-size="10.5" fill="#64748B">Compare configurations</text>
-
-  <line x1="470" y1="359" x2="480" y2="359" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- DEPLOY -->
-  <g filter="url(#sh)">
-    <g clip-path="url(#c3)">
-      <rect x="486" y="318" width="185" height="82" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
-      <rect x="486" y="318" width="185" height="4" fill="#059669"/>
-    </g>
-  </g>
-  <text x="578" y="348" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">DEPLOY</text>
-  <text x="578" y="366" text-anchor="middle" font-size="10.5" fill="#64748B">Launch to production</text>
-  <text x="578" y="380" text-anchor="middle" font-size="10.5" fill="#64748B">Auto trace collection</text>
-
-  <line x1="678" y1="359" x2="688" y2="359" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- MONITOR -->
-  <g filter="url(#sh)">
-    <g clip-path="url(#c4)">
-      <rect x="694" y="318" width="185" height="82" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
-      <rect x="694" y="318" width="185" height="4" fill="#EA580C"/>
-    </g>
-  </g>
-  <text x="786" y="348" text-anchor="middle" font-size="13" font-weight="700" fill="#9A3412">MONITOR</text>
-  <text x="786" y="366" text-anchor="middle" font-size="10.5" fill="#64748B">Track performance</text>
-  <text x="786" y="380" text-anchor="middle" font-size="10.5" fill="#64748B">Continuous evaluation</text>
-
-  <!-- Return arrow: MONITOR to DEVELOP -->
-  <path d="M786,406 L786,436 L162,436 L162,406" fill="none" stroke="#64748B" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr-dash)"/>
-  <rect x="415" y="426" width="120" height="20" rx="10" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="0.5"/>
-  <text x="475" y="440" text-anchor="middle" font-size="10" font-weight="600" fill="#64748B">iterate</text>
+  <!-- Return / iterate arrow -->
+  <path d="M786,418 L786,450 L162,450 L162,418" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrowGrey)"/>
+  <rect x="420" y="440" width="100" height="20" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="470" y="454" text-anchor="middle" font-size="9.5" font-weight="600" fill="#64748b">iterate</text>
 
   <!-- Footer -->
-  <text x="475" y="478" text-anchor="middle" font-size="10" fill="#CBD5E1">Same trace data powers every phase -- one abstraction from prototype to production</text>
+  <text x="470" y="490" text-anchor="middle" font-size="9" fill="#94a3b8">One decorator instruments your code. The same trace data powers every phase.</text>
 </svg>

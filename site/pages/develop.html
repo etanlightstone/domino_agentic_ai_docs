@@ -36,14 +36,17 @@
       <strong>Instrument your code</strong> to capture traces
     </li>
     <li>
-      <strong>Run your system</strong> and collect trace data
+      <strong>Wrap execution</strong> with <code>DominoRun()</code>
     </li>
     <li>
-      <strong>Review and evaluate</strong> the traces
+      <strong>Attach inline evaluations</strong> to score traces
+    </li>
+    <li>
+      <strong>Run as a Domino Job</strong> to create an experiment run
     </li>
   </ol>
 
-  <p>This page covers instrumentation &mdash; preparing your code to capture traces during execution.</p>
+  <p>This page covers the full instrumentation and evaluation workflow &mdash; from adding tracing through running evaluation Jobs that produce experiment runs in the <a href="experiment.html">Experiment Manager</a>.</p>
 
   <h2>Prerequisites</h2>
 
@@ -137,9 +140,87 @@ run = <span class="fn">DominoRun</span>(..., aggregated_metrics=metrics)</code><
 
   <p>If you don't provide <code>aggregated_metrics</code>, Domino automatically logs the <code>mean</code> of every metric logged to traces in the run.</p>
 
+  <div class="changed" data-change-label="New section &mdash; inline evaluation moved here from experiment tracking page">
+    <h2>Step 3: Attach inline evaluations</h2>
+
+    <p>Pass an <code>evaluator</code> function to <code>@add_tracing</code> to automatically score each trace as it's generated. The evaluator receives the completed span and returns a dictionary of metrics:</p>
+
+<pre><code><span class="dec">@add_tracing</span>(
+    name=<span class="str">"prioritize_ticket"</span>,
+    autolog_frameworks=[<span class="str">"openai"</span>],
+    evaluator=judge_response
+)
+<span class="kw">def</span> <span class="fn">run_agent</span>(...):
+    ...</code></pre>
+
+    <p>The evaluator is called after each invocation of the decorated function. It receives the span object with <code>.inputs</code> (what was passed to the function) and <code>.outputs</code> (what was returned). Return a dictionary of metric names to numeric values:</p>
+
+<pre><code><span class="kw">def</span> <span class="fn">judge_response</span>(span):
+    inputs = span.inputs
+    output = span.outputs
+    question = inputs[<span class="str">'data_point'</span>][<span class="str">'question'</span>]
+    answer = output[<span class="str">'answer'</span>]
+
+    evaluator = AgentEvaluator()
+    result = evaluator.evaluate_response(query=question, agent_output=answer)
+
+    <span class="kw">return</span> {
+        <span class="str">"toxicity_score"</span>: result.toxicity_score,
+        <span class="str">"relevancy_score"</span>: result.relevancy_score,
+        <span class="str">"accuracy_score"</span>: result.accuracy_score,
+        <span class="str">"overall_score"</span>: result.overall_score,
+    }</code></pre>
+
+    <p>The returned metrics become the evaluation scores visible on that trace in the Domino UI.</p>
+
+    <h3>Trace-level evaluators</h3>
+
+    <p>Use <code>trace_evaluator</code> to evaluate the <em>entire trace</em> rather than individual spans. This fires when the trace was both started and finished by the decorated function &mdash; useful for end-to-end quality checks:</p>
+
+<pre><code><span class="dec">@add_tracing</span>(
+    name=<span class="str">"prioritize_ticket"</span>,
+    autolog_frameworks=[<span class="str">"openai"</span>],
+    evaluator=judge_response,           <span class="cm"># Span-level</span>
+    trace_evaluator=check_end_to_end    <span class="cm"># Trace-level</span>
+)
+<span class="kw">def</span> <span class="fn">run_agent</span>(...):
+    ...</code></pre>
+  </div>
+
+  <div class="changed" data-change-label="New section &mdash; emphasizes that Jobs create experiment runs for Experiment Manager">
+    <h2>Step 4: Run as a Domino Job</h2>
+
+    <p><strong>Run your evaluation script as a Domino Job, not from a workspace.</strong> Running as a Job is what creates an <strong>experiment run</strong> in the Experiment Manager. This is the mechanism that lets you compare different agent configurations, view aggregated evaluation results, and deploy agents to production.</p>
+
+    <div class="info">
+      <p>You cannot create experiment runs from a workspace session. The experiment run is created when the Job starts and finalized when it completes. This is how Domino tracks the full configuration (code commit, YAML config, evaluation results) as a single versioned artifact.</p>
+    </div>
+
+    <p>A typical evaluation script wraps everything in <code>DominoRun</code> and loops through test data. Each call to the decorated function generates a trace with inline evaluation scores:</p>
+
+<pre><code><span class="kw">import</span> csv
+<span class="kw">from</span> domino.agents.logging <span class="kw">import</span> DominoRun
+
+config_path = <span class="str">"ai_system_config.yaml"</span>
+
+<span class="kw">with</span> <span class="fn">DominoRun</span>(agent_config_path=config_path) <span class="kw">as</span> run:
+    <span class="kw">with</span> open(<span class="str">"sample_questions.csv"</span>) <span class="kw">as</span> f:
+        <span class="kw">for</span> row <span class="kw">in</span> csv.DictReader(f):
+            process_single_question(row)  <span class="cm"># @add_tracing + evaluator</span></code></pre>
+
+    <p>After the Job completes:</p>
+
+    <ul>
+      <li>View traces in the <strong>Agent Traces</strong> tab in your project</li>
+      <li>View the experiment run in the <strong>Experiments</strong> tab</li>
+      <li>Compare runs with different agent configurations in the <a href="experiment.html">Experiment Manager</a></li>
+      <li><strong>Deploy an agent</strong> directly from any experiment run that originated from a Job</li>
+    </ul>
+  </div>
+
   <div class="next-steps">
     <h2>Next steps</h2>
-    <div class="next-link"><a href="experiment.html">Experiment tracking and traces with agents</a> &mdash; Log evaluations, view traces, and compare configurations</div>
+    <div class="next-link"><a href="experiment.html">Experiment Manager</a> &mdash; Compare runs, view traces, and deploy to production</div>
     <div class="next-link"><a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> &mdash; Set up LLM infrastructure for your agents</div>
   </div>
 

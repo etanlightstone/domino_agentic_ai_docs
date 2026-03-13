@@ -4,7 +4,7 @@
     { label: "Build and evaluate agentic systems", href: "/index.html" },
     { label: "Agentic AI overview", href: "/pages/overview.html", sub: true },
     { label: "Develop agentic systems", href: "/pages/develop.html", sub: true },
-    { label: "Experiment tracking and traces", href: "/pages/experiment.html", sub: true },
+    { label: "Experiment Manager", href: "/pages/experiment.html", sub: true },
     { label: "Deploy agentic systems", href: "/pages/deploy.html", sub: true },
     { label: "Monitor agentic systems", href: "/pages/monitor.html", sub: true },
     { heading: "API Reference" },

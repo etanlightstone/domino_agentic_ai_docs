@@ -27,72 +27,52 @@
 <main class="content">
   <h1>Build and evaluate agentic systems</h1>
 
-  <div class="changed" data-change-label="Rewritten &mdash; defines agents directly, removes sales language">
+  <div class="changed" data-change-label="Rewritten &mdash; compressed intro, ties directly to Domino workflow concepts, adds example repos">
     <template class="old-content">
       <p>Agentic systems orchestrate large language models (LLMs) with tools, APIs, and multi-step reasoning to accomplish complex tasks. These systems rely on LLM endpoints to process requests and generate responses. Register and deploy LLMs covers setting up the infrastructure your agents will use.</p>
       <p>Experimenting with agentic systems is not the same as training traditional ML models. Instead of starting from scratch, you assemble systems that mix LLMs, prompts, tools, and agents. These systems are powerful but also complex, dynamic, and challenging to evaluate.</p>
-    </template>
-    <p class="lead">An agentic system is software that uses an LLM to plan, execute, and adapt across multiple steps. At its core, it's a framework &mdash; LangChain, Pydantic AI, OpenAI Agents SDK, or your own code &mdash; wrapping orchestration logic around one or more LLM endpoints. The framework manages prompts, tools, memory, and routing; the LLM handles reasoning and generation.</p>
-    <p>These systems range from deterministic workflows (prompt chains, RAG pipelines) to fully autonomous agents that decide their own next steps. Domino supports both with the same instrumentation and evaluation infrastructure.</p>
-  </div>
-
-  <div class="changed" data-change-label="New &mdash; lifecycle diagram added to explain workflow at a glance">
-    <div class="diagram">
-      <img src="assets/lifecycle-diagram.svg" alt="Agentic development lifecycle in Domino: instrument your code, capture traces, then develop, experiment, deploy, and monitor using the same trace data.">
-    </div>
-  </div>
-
-  <div class="changed" data-change-label="New section &mdash; trace abstraction explained upfront instead of buried in sub-pages">
-    <h2>The trace: Domino's core abstraction</h2>
-
-    <p>A <strong>trace</strong> captures the full execution path of an agentic system: every LLM call, tool invocation, decision point, and intermediate output, along with token usage, latency, and cost at each step. One decorator (<code>@add_tracing</code>) instruments your code, and the same trace data powers every phase of the lifecycle below.</p>
-
-    <p>Domino builds on <a href="https://mlflow.org/docs/latest/genai/tracing/index.html">MLflow's tracing infrastructure</a> and integrates it into the broader ML lifecycle &mdash; connecting traces to project structure, governance workflows, deployment infrastructure, and production monitoring. This works whether your system is a RAG pipeline, a prompt chain with validation gates, or a fully autonomous multi-agent system.</p>
-  </div>
-
-  <h2>Lifecycle</h2>
-
-  <div class="changed" data-change-label="Restructured &mdash; lifecycle phases are now linked cards with richer descriptions">
-    <template class="old-content">
       <p><strong>Develop</strong> &mdash; Instrument your code to capture traces during execution. Traces record every step your agentic system takes, including downstream calls, so you can debug, analyze, and explain results.</p>
       <p><strong>Experiment</strong> &mdash; Attach evaluations to traces to assess quality. Compare different configurations to see how prompts, agents, or models affect outcomes. Export results for analysis and sharing.</p>
       <p><strong>Deploy</strong> &mdash; Launch your best configuration to production. Domino continues collecting traces from real user interactions automatically.</p>
       <p><strong>Monitor</strong> &mdash; Track performance with production traces. Run evaluations continuously and iterate when you identify issues or opportunities for improvement.</p>
+      <p>These capabilities help you track experiments, evaluate results, and iterate with confidence. Traces, evaluations, and comparisons live inside your project, making it easy for colleagues to review, share, and extend your work.</p>
     </template>
-    <div class="lifecycle-grid">
-      <a class="lifecycle-card card-develop" href="pages/develop.html">
-        <div class="card-phase">Develop</div>
-        <h3>Instrument &amp; capture traces</h3>
-        <p>Add <code>@add_tracing</code> to your functions. Works with LangChain, OpenAI, Pydantic AI, LlamaIndex, or standalone code. Every call &mdash; including downstream tool and agent calls &mdash; is recorded.</p>
-      </a>
 
-      <a class="lifecycle-card card-experiment" href="pages/experiment.html">
-        <div class="card-phase">Experiment</div>
-        <h3>Evaluate &amp; compare</h3>
-        <p>Attach evaluations to traces: programmatic metrics, manual SME labels, or ad-hoc batch runs. Compare configurations side by side with trace diffs to see exactly where changes helped or hurt.</p>
-      </a>
+    <p class="lead">An agentic system uses an LLM to plan, execute, and adapt across multiple steps. It's typically a framework &mdash; LangChain, Pydantic AI, OpenAI Agents SDK, or your own code &mdash; wrapping orchestration logic around LLM endpoints. Domino provides the infrastructure to instrument, evaluate, deploy, and monitor these systems with one consistent abstraction: <strong>traces</strong>.</p>
 
-      <a class="lifecycle-card card-deploy" href="pages/deploy.html">
-        <div class="card-phase">Deploy</div>
-        <h3>Launch to production</h3>
-        <p>Deploy your best configuration. Domino continues collecting traces from real user interactions automatically &mdash; no instrumentation changes needed between development and production.</p>
-      </a>
+    <div class="info">
+      <p><strong>Quick start.</strong> Clone a working example to see the full workflow in action:</p>
+      <ul>
+        <li><a href="https://github.com/etanlightstone-domino/simple_domino_agent">simple_domino_agent</a> &mdash; Minimal agent with tool calls, tracing, evaluation, and deployment</li>
+        <li><a href="https://github.com/dominodatalab/rag-agent-demo">rag-agent-demo</a> &mdash; RAG agent with ChromaDB, same Domino instrumentation patterns</li>
+      </ul>
+    </div>
 
-      <a class="lifecycle-card card-monitor" href="pages/monitor.html">
-        <div class="card-phase">Monitor</div>
-        <h3>Track &amp; iterate</h3>
-        <p>Track performance with production traces. Run evaluations continuously and iterate when accuracy drops, latency spikes, or costs increase. The same trace data powers debugging and audit.</p>
-      </a>
+    <h2>How it works in Domino</h2>
+
+    <p>A <strong>trace</strong> is a structured record of every LLM call, tool invocation, and decision your agent makes &mdash; with token usage, latency, and cost. One decorator (<code>@add_tracing</code>) instruments your code, and the same trace data flows through every phase:</p>
+
+    <div class="diagram">
+      <img src="assets/lifecycle-diagram.svg" alt="Agentic development workflow in Domino: develop in a Workspace, evaluate via Jobs, compare and deploy from Experiment Manager, monitor in production.">
+    </div>
+
+    <ol>
+      <li><strong>Develop</strong> in a <strong>Domino Workspace</strong>. Write your agent code using any framework, add <code>@add_tracing</code> with inline evaluators to instrument it, and prepare test data for your agent configuration.</li>
+      <li><strong>Evaluate</strong> by running your evaluation script as a <strong>Domino Job</strong>. Each Job creates an experiment run in the Experiment Manager, capturing traces with evaluation scores for your agent configuration. Runs aggregate evaluation results across all traces.</li>
+      <li><strong>Compare and deploy</strong> in the <strong>Experiment Manager</strong>. Compare runs (different agent versions/configurations) and individual traces within runs. Deploy directly from any experiment run that originated from a Job &mdash; Domino tracks full lineage between dev and production (commit, agent config, and performance results).</li>
+      <li><strong>Monitor</strong> in <strong>production</strong>. The same <code>@add_tracing</code> instrumentation captures live user interactions as traces. Schedule evaluation Jobs to continuously score production traces and iterate when quality drops.</li>
+    </ol>
+
+    <p>Your agents rely on LLM endpoints to process requests &mdash; see <a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> for setting up that infrastructure. For conceptual background on what makes a system agentic, see <a href="pages/overview.html">Agentic AI overview</a>.</p>
+
+    <div class="next-steps">
+      <h2>Get started</h2>
+      <div class="next-link"><a href="pages/develop.html">Develop agentic systems</a> &mdash; Instrument your code, add evaluators, and run as a Job</div>
+      <div class="next-link"><a href="pages/experiment.html">Experiment Manager</a> &mdash; Compare agent configurations and deploy to production</div>
+      <div class="next-link"><a href="pages/deploy.html">Deploy agentic systems</a> &mdash; Production deployment details</div>
+      <div class="next-link"><a href="pages/monitor.html">Monitor agentic systems</a> &mdash; Track production performance</div>
     </div>
   </div>
-
-  <p>These capabilities live inside your <a href="https://docs.dominodatalab.com/en/cloud/user_guide/a8e081/work-with-projects/">Domino project</a>, making it straightforward for colleagues to review, share, and extend your work.</p>
-
-  <h2>Prerequisites</h2>
-
-  <p>Your agents rely on LLM endpoints to process requests and generate responses. See <a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> for setting up that infrastructure.</p>
-
-  <p>For background on what makes a system agentic and the specific challenges these systems introduce, see <a href="pages/overview.html">Agentic AI overview</a>.</p>
 
 </main>
 

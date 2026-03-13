@@ -668,6 +668,26 @@ td {
 
 .diff-added-content p { margin-bottom: 10px; font-size: 14px; }
 
+/* ─── Screenshot Placeholders ─── */
+.screenshot-placeholder {
+  margin: 20px 0;
+  padding: 32px 24px;
+  background: #F8FAFC;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.screenshot-placeholder strong {
+  display: block;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
 @media (max-width: 640px) {
   .sidebar { display: none; }
   .content { margin-left: 0; padding: 32px 24px 60px; }
