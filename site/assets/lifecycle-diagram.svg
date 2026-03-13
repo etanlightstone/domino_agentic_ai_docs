@@ -69,20 +69,12 @@
     </marker>
   </defs>
 
-  <!-- @add_tracing badge -->
-  <rect x="358" y="152" width="224" height="28" rx="14" fill="#4f46e5"/>
-  <text x="470" y="170" text-anchor="middle" font-size="11" font-weight="600" fill="#fff" font-family="'SF Mono','Fira Code',monospace">@add_tracing</text>
+  <!-- Domino Platform & Agent SDK bubble -->
+  <rect x="295" y="164" width="350" height="48" rx="24" fill="url(#grad-traces)" filter="url(#shadow)"/>
+  <text x="470" y="193" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" letter-spacing=".5">Domino Platform &amp; Agent SDK</text>
 
-  <!-- Connector from badge to TRACES bar -->
-  <line x1="470" y1="180" x2="470" y2="200" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
-
-  <!-- TRACES bar -->
-  <rect x="70" y="200" width="800" height="40" rx="8" fill="url(#grad-traces)"/>
-  <text x="470" y="226" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" letter-spacing="2">TRACES</text>
-  <text x="470" y="224" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)" dy="14">LLM calls &#x00B7; tool invocations &#x00B7; decisions &#x00B7; token usage &#x00B7; latency &#x00B7; cost</text>
-
-  <!-- Connector from TRACES to lifecycle -->
-  <line x1="470" y1="240" x2="470" y2="260" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Connector from bubble to lifecycle -->
+  <line x1="470" y1="212" x2="470" y2="260" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
 
   <!-- DOMINO WORKFLOW label -->
   <text x="470" y="278" text-anchor="middle" font-size="10" font-weight="600" fill="#94a3b8" letter-spacing="1.5">DOMINO WORKFLOW</text>
@@ -152,5 +144,5 @@
   <text x="470" y="454" text-anchor="middle" font-size="9.5" font-weight="600" fill="#64748b">iterate</text>
 
   <!-- Footer -->
-  <text x="470" y="490" text-anchor="middle" font-size="9" fill="#94a3b8">One decorator instruments your code. The same trace data powers every phase.</text>
+  <text x="470" y="490" text-anchor="middle" font-size="9" fill="#94a3b8">The Domino Platform and Agent SDK power every phase of the agentic development workflow.</text>
 </svg>
