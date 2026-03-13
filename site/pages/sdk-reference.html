@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Python SDK: Agents | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="#" class="active">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <div class="changed" data-change-label="New page &mdash; agents SDK reference consolidated from API docs">
+    <h1>Python SDK: Agents</h1>
+
+    <p class="lead">The <code>domino.agents</code> package provides tracing, evaluation, and search capabilities for agentic systems. This is part of the <a href="https://github.com/dominodatalab/python-domino">python-domino library</a>.</p>
+  </div>
+
+  <div class="note">
+    <div class="note-title">Import paths</div>
+    <p>The canonical import path is <code>from domino.agents.tracing import ...</code>. Some documentation may reference <code>domino.aisystems.tracing</code> &mdash; this is an older alias. Both paths resolve to the same module.</p>
+  </div>
+
+  <h2>add_tracing</h2>
+
+<pre><code>domino.agents.tracing.<span class="fn">add_tracing</span>(
+    name: <span class="kw">str</span>,
+    autolog_frameworks: list[<span class="kw">str</span>] | <span class="kw">None</span> = [],
+    evaluator: Callable | <span class="kw">None</span> = <span class="kw">None</span>,
+    trace_evaluator: Callable | <span class="kw">None</span> = <span class="kw">None</span>,
+    eagerly_evaluate_streamed_results: <span class="kw">bool</span> = <span class="kw">True</span>,
+    allow_tracing_evaluator: <span class="kw">bool</span> = <span class="kw">False</span>
+)</code></pre>
+
+  <p>Decorator that starts an MLflow span for the decorated function. If an existing trace is in progress, appends a span to it; otherwise creates a new trace.</p>
+
+  <table>
+    <thead>
+      <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td>Name of the span (or new trace).</td>
+      </tr>
+      <tr>
+        <td><code>autolog_frameworks</code></td>
+        <td><code>list[str] | None</code></td>
+        <td>MLflow-supported frameworks to autolog (e.g. <code>["langchain"]</code>, <code>["openai"]</code>).</td>
+      </tr>
+      <tr>
+        <td><code>evaluator</code></td>
+        <td><code>Callable | None</code></td>
+        <td>Function that receives the span and returns evaluation results as <code>dict[str, int | float | str]</code>. Runs on every invocation.</td>
+      </tr>
+      <tr>
+        <td><code>trace_evaluator</code></td>
+        <td><code>Callable | None</code></td>
+        <td>Function that receives the complete trace. Only fires when the trace was started and finished by this decorator. Useful for end-to-end quality checks.</td>
+      </tr>
+      <tr>
+        <td><code>eagerly_evaluate_streamed_results</code></td>
+        <td><code>bool</code></td>
+        <td>When <code>True</code> (default), aggregates all yielded values into a single span for evaluation. When <code>False</code>, each yielded value creates a separate span with a shared <code>group_id</code>.</td>
+      </tr>
+      <tr>
+        <td><code>allow_tracing_evaluator</code></td>
+        <td><code>bool</code></td>
+        <td>When <code>True</code>, inline evaluators will also be traced by MLflow autolog. Default <code>False</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>init_tracing</h2>
+
+<pre><code>domino.agents.tracing.<span class="fn">init_tracing</span>(
+    autolog_frameworks: list[<span class="kw">str</span>] | <span class="kw">None</span> = <span class="kw">None</span>
+)</code></pre>
+
+  <p>Initialize MLflow autologging and set the active experiment to enable tracing. Used to initialize logging in both development and production modes.</p>
+
+  <p>In production mode, the environment variables <code>DOMINO_AGENT_IS_PROD</code> and <code>DOMINO_APP_ID</code> must be set. Call <code>init_tracing()</code> before your app starts serving requests.</p>
+
+  <h2>search_traces</h2>
+
+<pre><code>domino.agents.tracing.<span class="fn">search_traces</span>(
+    run_id: <span class="kw">str</span>,
+    trace_name: <span class="kw">str</span> | <span class="kw">None</span> = <span class="kw">None</span>,
+    start_time: datetime | <span class="kw">None</span> = <span class="kw">None</span>,
+    end_time: datetime | <span class="kw">None</span> = <span class="kw">None</span>,
+    page_token: <span class="kw">str</span> | <span class="kw">None</span> = <span class="kw">None</span>,
+    max_results: <span class="kw">int</span> | <span class="kw">None</span> = <span class="kw">None</span>
+) &rarr; SearchTracesResponse</code></pre>
+
+  <p>Search for traces in a development-mode evaluation run. Returns a paginated response of trace summaries.</p>
+
+  <h2>search_agent_traces</h2>
+
+<pre><code>domino.agents.tracing.<span class="fn">search_agent_traces</span>(
+    agent_id: <span class="kw">str</span>,
+    agent_version: <span class="kw">str</span> | <span class="kw">None</span> = <span class="kw">None</span>,
+    trace_name: <span class="kw">str</span> | <span class="kw">None</span> = <span class="kw">None</span>,
+    start_time: datetime | <span class="kw">None</span> = <span class="kw">None</span>,
+    end_time: datetime | <span class="kw">None</span> = <span class="kw">None</span>,
+    page_token: <span class="kw">str</span> | <span class="kw">None</span> = <span class="kw">None</span>,
+    max_results: <span class="kw">int</span> | <span class="kw">None</span> = <span class="kw">None</span>
+) &rarr; SearchTracesResponse</code></pre>
+
+  <p>Search for traces from a deployed production agent. Filter by agent version, trace name, and time range. If <code>agent_version</code> is not provided, searches across all versions.</p>
+
+  <h2>Data classes</h2>
+
+  <h3>EvaluationResult</h3>
+
+<pre><code><span class="kw">class</span> domino.agents.tracing.<span class="fn">EvaluationResult</span>(
+    name: <span class="kw">str</span>,
+    value: <span class="kw">float</span> | <span class="kw">str</span>
+)</code></pre>
+
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>name</code></td><td><code>str</code></td><td>Name of the evaluation</td></tr>
+      <tr><td><code>value</code></td><td><code>float | str</code></td><td>Evaluation result value</td></tr>
+    </tbody>
+  </table>
+
+  <h3>TraceSummary</h3>
+
+<pre><code><span class="kw">class</span> domino.agents.tracing.<span class="fn">TraceSummary</span>(
+    name: <span class="kw">str</span>,
+    id: <span class="kw">str</span>,
+    spans: list[SpanSummary],
+    evaluation_results: list[EvaluationResult]
+)</code></pre>
+
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>name</code></td><td><code>str</code></td><td>Name of the trace</td></tr>
+      <tr><td><code>id</code></td><td><code>str</code></td><td>MLflow trace ID</td></tr>
+      <tr><td><code>spans</code></td><td><code>list[SpanSummary]</code></td><td>Child spans of this trace</td></tr>
+      <tr><td><code>evaluation_results</code></td><td><code>list[EvaluationResult]</code></td><td>Evaluation results for this trace</td></tr>
+    </tbody>
+  </table>
+
+  <h3>SpanSummary</h3>
+
+<pre><code><span class="kw">class</span> domino.agents.tracing.<span class="fn">SpanSummary</span>(
+    id: <span class="kw">str</span>,
+    name: <span class="kw">str</span>,
+    trace_id: <span class="kw">str</span>,
+    inputs: Any,
+    outputs: Any
+)</code></pre>
+
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td><code>str</code></td><td>MLflow span ID</td></tr>
+      <tr><td><code>name</code></td><td><code>str</code></td><td>Span name</td></tr>
+      <tr><td><code>trace_id</code></td><td><code>str</code></td><td>Parent trace ID</td></tr>
+      <tr><td><code>inputs</code></td><td><code>Any</code></td><td>Inputs to the function that created the span</td></tr>
+      <tr><td><code>outputs</code></td><td><code>Any</code></td><td>Outputs of the function</td></tr>
+    </tbody>
+  </table>
+
+  <h3>SearchTracesResponse</h3>
+
+<pre><code><span class="kw">class</span> domino.agents.tracing.<span class="fn">SearchTracesResponse</span>(
+    data: list[TraceSummary],
+    page_token: <span class="kw">str</span> | <span class="kw">None</span>
+)</code></pre>
+
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>data</code></td><td><code>list[TraceSummary]</code></td><td>List of trace summaries</td></tr>
+      <tr><td><code>page_token</code></td><td><code>str | None</code></td><td>Token for the next page of results</td></tr>
+    </tbody>
+  </table>
+
+  <h2>DominoRun</h2>
+
+  <p>The <code>DominoRun</code> wrapper from <code>domino.agents.logging</code> creates an MLflow experiment run that stores traces and logged parameters.</p>
+
+<pre><code><span class="kw">from</span> domino.agents.logging <span class="kw">import</span> DominoRun
+
+<span class="kw">with</span> <span class="fn">DominoRun</span>(
+    agent_config_path=<span class="str">"config.yaml"</span>,
+    aggregated_metrics=[(<span class="str">"toxicity"</span>, <span class="str">"mean"</span>), (<span class="str">"bleu"</span>, <span class="str">"median"</span>)]
+) <span class="kw">as</span> run:
+    run_agent(...)</code></pre>
+
+  <table>
+    <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>agent_config_path</code></td><td>Path to a YAML config file. Logged as parameters in the Experiment Manager.</td></tr>
+      <tr><td><code>aggregated_metrics</code></td><td>List of <code>(metric_name, aggregation)</code> tuples. Aggregation types: <code>mean</code>, <code>median</code>, <code>stdev</code>, <code>min</code>, <code>max</code>. Defaults to <code>mean</code> for all metrics.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Environment variables</h2>
+
+  <table>
+    <thead><tr><th>Variable</th><th>Required for</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>MLFLOW_TRACKING_URI</code></td><td>All modes</td><td>Set automatically in Domino executions. For local testing use <code>http://localhost:5000</code>.</td></tr>
+      <tr><td><code>DOMINO_AGENT_IS_PROD</code></td><td>Production</td><td>Set to indicate production mode for <code>init_tracing()</code>.</td></tr>
+      <tr><td><code>DOMINO_APP_ID</code></td><td>Production</td><td>The ID of the deployed agent app.</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>

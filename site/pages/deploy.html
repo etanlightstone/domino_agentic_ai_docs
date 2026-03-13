@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Deploy agentic systems | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <h1>Deploy agentic systems</h1>
+
+  <p class="lead">After experimenting and identifying a promising configuration, deploy your agentic system to production. Agents use the same infrastructure as Domino Apps with configurations tailored for agentic workloads.</p>
+
+  <p>The same instrumentation you used during <a href="experiment.html">experimentation</a> continues to work in production, automatically collecting traces from real user interactions.</p>
+
+  <h2>Prerequisites</h2>
+
+  <ul>
+    <li>Project files containing your agent code (you can optionally deploy from an experiment with collected traces)</li>
+    <li>The Domino logging SDK installed in your environment to enable production monitoring</li>
+    <li>Project Collaborator permissions to deploy and edit agents</li>
+  </ul>
+
+  <h2>Step 1: Deploy an agent</h2>
+
+  <p>You can deploy an agent in two ways:</p>
+
+  <div class="tab-group">
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-tab="tab-from-exp">From Experiment Manager</button>
+      <button class="tab-btn" data-tab="tab-from-apps">From Apps View</button>
+    </div>
+
+    <div id="tab-from-exp" class="tab-panel active">
+      <p>After comparing evaluation runs and identifying a configuration you want to deploy:</p>
+      <ol>
+        <li>In your project, from the left navigation, click <strong>Experiments</strong>.</li>
+        <li>Choose the experiment with the agent configurations you're evaluating.</li>
+        <li>Select the run you want to launch.</li>
+        <li>Click <strong>&hellip;</strong> on the right to launch the run.</li>
+      </ol>
+      <p>A deployment wizard opens, similar to the Apps deployment flow. The wizard pre-fills the code commit from the selected run and prompts you to specify the entrypoint for your agent.</p>
+    </div>
+
+    <div id="tab-from-apps" class="tab-panel">
+      <p>Deploy directly from the Apps view in your project. This follows the standard <a href="https://docs.dominodatalab.com/en/cloud/user_guide/cd0095/publish-and-share-an-app/">Publish and share an App</a> workflow, with configuration options specific to agentic workloads.</p>
+    </div>
+  </div>
+
+  <h2>Step 2: Collect production traces</h2>
+
+  <p>Production traces are collected automatically using the same <code>@add_tracing</code> decorator or <code>init_tracing()</code> function you used during experimentation. No additional instrumentation is needed.</p>
+
+  <div class="changed" data-change-label="New &mdash; production initialization detail surfaced from SDK reference">
+    <div class="info">
+      <p><strong>Production initialization:</strong> In production mode, <code>init_tracing()</code> requires the environment variables <code>DOMINO_AGENT_IS_PROD</code> and <code>DOMINO_APP_ID</code> to be set. These are configured automatically when deploying through the Domino UI. Call <code>init_tracing()</code> before your app starts to begin logging traces.</p>
+    </div>
+
+<pre><code><span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> init_tracing
+
+<span class="cm"># Call before your app starts serving requests</span>
+init_tracing(autolog_frameworks=[<span class="str">"langchain"</span>])</code></pre>
+  </div>
+
+  <p>Production traces appear in the agent's <strong>Performance</strong> tab and include the same details captured during development.</p>
+
+  <div class="next-steps">
+    <h2>Next steps</h2>
+    <div class="next-link"><a href="monitor.html">Monitor agentic systems</a> &mdash; Track production performance and run evaluations</div>
+    <div class="next-link"><a href="experiment.html">Experiment tracking and traces</a> &mdash; Compare more configurations before deploying</div>
+  </div>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>

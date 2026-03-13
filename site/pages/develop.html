@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Develop agentic systems | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <h1>Develop agentic systems</h1>
+
+  <p class="lead">Instrument your agentic system to capture traces during execution. Tracing records every call your system makes &mdash; including downstream calls from agents and tools &mdash; so you can evaluate performance and debug issues.</p>
+
+  <p>To develop an agentic system in Domino:</p>
+
+  <ol class="steps">
+    <li>
+      <strong>Instrument your code</strong> to capture traces
+    </li>
+    <li>
+      <strong>Run your system</strong> and collect trace data
+    </li>
+    <li>
+      <strong>Review and evaluate</strong> the traces
+    </li>
+  </ol>
+
+  <p>This page covers instrumentation &mdash; preparing your code to capture traces during execution.</p>
+
+  <h2>Prerequisites</h2>
+
+  <ul>
+    <li>Familiarity with MLflow runs and the <a href="https://docs.dominodatalab.com/en/cloud/user_guide/da707d/track-and-monitor-experiments/">Domino Experiment Manager</a>.</li>
+    <li>Domino Python SDK and <code>mlflow==3.2.0</code> installed in your environment.</li>
+  </ul>
+
+  <p>To install these packages, add the following to your Dockerfile instructions:</p>
+
+<pre><code><span class="kw">RUN</span> pip install --no-cache-dir <span class="str">"git+https://github.com/dominodatalab/python-domino.git@master#egg=dominodatalab[data,aisystems]"</span>
+<span class="kw">RUN</span> pip install mlflow==3.2.0</code></pre>
+
+  <div class="note">
+    <div class="note-title">Note</div>
+    <p>Domino Standard Environments (DSEs) currently include an older MLflow version and do not include the Domino SDK. This requirement is temporary and will be removed once SDK support is built into DSE.</p>
+  </div>
+
+  <h2>Step 1: Add the tracing decorator</h2>
+
+  <p>Add the <code>@add_tracing</code> decorator to your functions that invoke your system or agent. This captures every call, including downstream calls, and logs them in your experiment run.</p>
+
+  <p>Domino supports all <a href="https://mlflow.org/docs/3.3.2/genai/tracing/integrations/">MLflow auto tracing integrations</a>, including <a href="https://www.langchain.com/">LangChain</a>, <a href="https://openai.com/">OpenAI</a>, <a href="https://ai.pydantic.dev/">Pydantic AI</a>, and others. Parameters, metrics, and artifacts from your runs are automatically captured alongside trace data.</p>
+
+  <div class="changed" data-change-label="Replaced &mdash; expanded generic span explanation into typed span documentation">
+    <template class="old-content">
+      <p>If you don't use an autolog framework, the traced function will still add a span to an existing trace or create a new one if none is in progress. This lets you capture trace data even when you aren't working with a specific agent framework.</p>
+    </template>
+    <h3>How span types work</h3>
+
+    <p>When you use an autolog framework, MLflow automatically creates <strong>typed spans</strong> that capture rich, structured data for each step. For example, a LangChain autolog trace will produce <code>LLM</code> spans (with token usage, model parameters, and message history), <code>RETRIEVER</code> spans (with retrieved documents and source URIs), and <code>TOOL</code> spans (with call parameters and results). These typed spans enable filtering, searching, and specialized UI rendering in the Trace Explorer.</p>
+
+    <p>If you don't use an autolog framework, <code>@add_tracing</code> still creates a span for each decorated function, but the span will be generic &mdash; it captures inputs, outputs, and latency, without the structured metadata that typed spans provide. This is useful for capturing the overall execution flow, but for richer observability you can combine <code>@add_tracing</code> with MLflow's <code>@mlflow.trace</code> decorator on inner functions to manually assign span types and attributes. See <a href="https://mlflow.org/docs/latest/genai/tracing/app-instrumentation/manual-tracing/">MLflow Manual Tracing</a> for details.</p>
+  </div>
+
+  <p>Example using <code>langchain</code>:</p>
+
+<pre><code><span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> add_tracing
+
+<span class="dec">@add_tracing</span>(name=<span class="str">"prioritize_ticket"</span>, autolog_frameworks=[<span class="str">"langchain"</span>])
+<span class="kw">def</span> <span class="fn">run_agent</span>(...):
+    ...</code></pre>
+
+  <p>Example (framework-agnostic):</p>
+
+<pre><code><span class="kw">from</span> domino.agents.logging <span class="kw">import</span> DominoRun
+
+<span class="kw">with</span> <span class="fn">DominoRun</span>() <span class="kw">as</span> run:
+    run_agent(...)</code></pre>
+
+  <div class="changed" data-change-label="New &mdash; quick reference table for framework span types">
+    <h3>Autolog framework span types</h3>
+
+    <p>The following frameworks automatically produce typed spans when passed to <code>autolog_frameworks</code>:</p>
+
+    <table>
+      <thead>
+        <tr><th>Framework</th><th>Span types captured</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>langchain</code></td><td>LLM, TOOL, RETRIEVER, CHAIN, AGENT</td></tr>
+        <tr><td><code>openai</code></td><td>LLM (chat completions, tool calls)</td></tr>
+        <tr><td><code>anthropic</code></td><td>LLM (messages, token usage)</td></tr>
+        <tr><td><code>pydantic_ai</code></td><td>LLM, TOOL</td></tr>
+        <tr><td><code>llama_index</code></td><td>LLM, RETRIEVER, EMBEDDING</td></tr>
+      </tbody>
+    </table>
+
+    <p>For the full list of supported integrations, see <a href="https://mlflow.org/docs/3.3.2/genai/tracing/integrations/">MLflow Auto Tracing Integrations</a>.</p>
+  </div>
+
+  <h2>Step 2: Run with DominoRun() wrapper</h2>
+
+  <p>After decorating your function, run it inside an MLflow run using the <code>DominoRun()</code> wrapper. This creates an experiment run that stores your traces and any logged parameters or metrics.</p>
+
+  <h3>Add YAML configuration (optional)</h3>
+
+  <p>Pass a YAML configuration file into <code>DominoRun()</code> to log your system configuration as parameters in the Experiment Manager.</p>
+
+<pre><code><span class="kw">with</span> <span class="fn">DominoRun</span>(agent_config_path=CONFIG_PATH) <span class="kw">as</span> run:
+    run_agent(...)</code></pre>
+
+  <h3>Add aggregated metrics (optional)</h3>
+
+  <p>Provide a list of metric-aggregation tuples when creating a <code>DominoRun</code> to make it easier to compare runs:</p>
+
+<pre><code>metrics = [(<span class="str">"toxicity_score"</span>, <span class="str">"mean"</span>), (<span class="str">"bleu_score"</span>, <span class="str">"median"</span>)]
+run = <span class="fn">DominoRun</span>(..., aggregated_metrics=metrics)</code></pre>
+
+  <p>Domino computes these aggregated metrics and attaches them to the corresponding run. Available aggregation types: <code>mean</code>, <code>median</code>, <code>stdev</code>, <code>min</code>, <code>max</code>.</p>
+
+  <p>If you don't provide <code>aggregated_metrics</code>, Domino automatically logs the <code>mean</code> of every metric logged to traces in the run.</p>
+
+  <div class="next-steps">
+    <h2>Next steps</h2>
+    <div class="next-link"><a href="experiment.html">Experiment tracking and traces with agents</a> &mdash; Log evaluations, view traces, and compare configurations</div>
+    <div class="next-link"><a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> &mdash; Set up LLM infrastructure for your agents</div>
+  </div>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>

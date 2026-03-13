@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Monitor agentic systems | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <h1>Monitor agentic systems</h1>
+
+  <p class="lead">After deploying your agentic system to production, monitor its performance with real user interactions. Domino automatically collects production traces and provides dashboards to track performance, usage, and quality over time.</p>
+
+  <h2>Monitor agent performance</h2>
+
+  <p>Access monitoring views from your deployed agent's dashboard. These views show how your agent performs with real user interactions:</p>
+
+  <table>
+    <thead>
+      <tr><th>View</th><th>What it shows</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Overview</strong></td><td>Deployment status and configuration details</td></tr>
+      <tr><td><strong>Performance</strong></td><td>Evaluation metrics as visualizations alongside production traces. Review metrics over time to spot trends and identify patterns in successful versus problematic interactions.</td></tr>
+      <tr><td><strong>Usage</strong></td><td>User invocations and interaction tracking</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Evaluate production traces</h2>
+
+  <p>Run evaluations against production traces to continuously monitor your agent's quality. Use the same evaluation methods you used during experimentation: manual UI annotations, inline evaluators, or ad-hoc evaluation scripts.</p>
+
+  <p>The most effective approach is to run evaluations as <a href="https://docs.dominodatalab.com/en/cloud/user_guide/942549/work-with-jobs/">Domino Jobs</a>. This lets you version and reproduce evaluations, and you can <a href="https://docs.dominodatalab.com/en/cloud/user_guide/5dce1f/schedule-jobs/">schedule Jobs</a> to continuously monitor your agent's quality as it handles user requests.</p>
+
+  <div class="changed" data-change-label="New &mdash; programmatic trace search via search_agent_traces() from SDK">
+    <h3>Searching production traces programmatically</h3>
+
+    <p>Use <code>search_agent_traces()</code> to find traces from a specific deployed agent version. This enables programmatic monitoring and analysis:</p>
+
+<pre><code><span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> search_agent_traces
+
+response = search_agent_traces(
+    agent_id=<span class="str">"your-agent-id"</span>,
+    agent_version=<span class="str">"1.0"</span>,
+    trace_name=<span class="str">"prioritize_ticket"</span>,
+    max_results=<span class="str">50</span>
+)
+
+<span class="kw">for</span> trace <span class="kw">in</span> response.data:
+    print(trace.name, len(trace.spans), <span class="str">"spans"</span>)
+    <span class="kw">for</span> result <span class="kw">in</span> trace.evaluation_results:
+        print(f<span class="str">"  {result.name}: {result.value}"</span>)</code></pre>
+  </div>
+
+  <h2>Iterate on configurations</h2>
+
+  <p>When you identify issues or opportunities for improvement, relaunch your production agent's configuration into a workspace. See <a href="https://docs.dominodatalab.com/en/cloud/user_guide/da707d/track-and-monitor-experiments/">Track and monitor experiments</a> for details on relaunching runs.</p>
+
+  <p>This workflow lets you:</p>
+
+  <ul>
+    <li>Reproduce the exact production configuration</li>
+    <li>Debug issues identified in production traces</li>
+    <li>Maintain clear lineage between production agents and their source experiments</li>
+  </ul>
+
+  <div class="next-steps">
+    <h2>Next steps</h2>
+    <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Iterate on your agent configuration based on production insights</div>
+    <div class="next-link"><a href="experiment.html">Experiment tracking and traces</a> &mdash; Test improvements before redeploying</div>
+  </div>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>

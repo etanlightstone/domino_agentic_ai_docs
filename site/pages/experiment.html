@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Experiment tracking and traces | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <h1>Experiment tracking and traces with agents</h1>
+
+  <p class="lead">After instrumenting your agentic system, run experiments to test different configurations and evaluate quality. Domino captures traces from each run and lets you attach evaluations, compare results, and export findings.</p>
+
+  <h2>View traces</h2>
+
+  <p>Once you have logged at least one run with traces, view and analyze them in the <strong>Experiments</strong> tab:</p>
+
+  <ol>
+    <li>Find and click the experiment you want to review.</li>
+    <li>Open a run and select the <strong>Traces</strong> tab.</li>
+  </ol>
+
+  <p>When reviewing traces you can:</p>
+  <ul>
+    <li>See evaluations logged in code</li>
+    <li>Add metrics (float values) or labels (string values) by clicking <strong>Add Metric/Label</strong></li>
+    <li>Click any metric or label cell to open the detailed trace view</li>
+  </ul>
+
+  <h2>Log evaluations</h2>
+
+  <p>Log evaluations inline during execution or ad-hoc after traces are generated. The <a href="https://github.com/dominodatalab/domino-genai-instrumentation-example">Domino instrumentation examples repository</a> has working examples for both approaches.</p>
+
+  <div class="tab-group">
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-tab="tab-inline">Inline</button>
+      <button class="tab-btn" data-tab="tab-adhoc">Ad-hoc</button>
+    </div>
+
+    <div id="tab-inline" class="tab-panel active">
+      <p>Pass an <code>evaluator</code> argument in the decorator to capture inputs and outputs of the decorated function. An evaluator is a function that receives the span and returns a dictionary of evaluation results.</p>
+
+<pre><code><span class="dec">@add_tracing</span>(
+    name=<span class="str">"prioritize_ticket"</span>,
+    autolog_frameworks=[<span class="str">"openai"</span>],
+    evaluator=judge_response  <span class="cm"># Span-level evaluator</span>
+)
+<span class="kw">def</span> <span class="fn">run_agent</span>(...):
+    ...</code></pre>
+
+      <div class="changed" data-change-label="New &mdash; trace_evaluator for end-to-end quality checks (from SDK insights)">
+        <p>You can also pass a <code>trace_evaluator</code> to evaluate the <em>entire trace</em> (not just individual spans). This is valuable for end-to-end quality checks. The trace evaluator fires when the trace was both started and finished by the decorated function.</p>
+
+<pre><code><span class="dec">@add_tracing</span>(
+    name=<span class="str">"prioritize_ticket"</span>,
+    autolog_frameworks=[<span class="str">"openai"</span>],
+    evaluator=judge_response,           <span class="cm"># Span-level</span>
+    trace_evaluator=check_end_to_end    <span class="cm"># Trace-level</span>
+)
+<span class="kw">def</span> <span class="fn">run_agent</span>(...):
+    ...</code></pre>
+      </div>
+    </div>
+
+    <div id="tab-adhoc" class="tab-panel">
+      <div class="changed" data-change-label="New &mdash; ad-hoc evaluation with search_traces() code example">
+        <p>Run evaluations after traces have been collected. Use <code>search_traces()</code> to find traces from a run, then log evaluation results against them. This is useful for batch evaluation with SME review or automated scoring pipelines.</p>
+
+<pre><code><span class="kw">from</span> domino.agents.tracing <span class="kw">import</span> search_traces
+
+response = search_traces(run_id=<span class="str">"your-run-id"</span>, trace_name=<span class="str">"prioritize_ticket"</span>)
+<span class="kw">for</span> trace <span class="kw">in</span> response.data:
+    <span class="cm"># Evaluate each trace and log results</span>
+    ...</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <h2>Compare traces</h2>
+
+  <p>Compare runs to see how different configurations perform on the same inputs:</p>
+
+  <ol>
+    <li>From the experiment view, select two to four runs and click <strong>Compare</strong>.</li>
+    <li>Open the <strong>Traces comparison</strong> view in the Experiment Manager.</li>
+    <li>Review results across runs to spot patterns. Click any metric or label cell to open the detailed trace view.</li>
+  </ol>
+
+  <h3>Export results</h3>
+
+  <p>Export data in two formats:</p>
+
+  <ul>
+    <li><strong>CSV</strong> &mdash; Open the experiment and click the three dots in the upper right.</li>
+    <li><strong>PDF report</strong> &mdash; Select two to four runs to compare and click the three dots in the upper right.</li>
+  </ul>
+
+  <div class="next-steps">
+    <h2>Next steps</h2>
+    <div class="next-link"><a href="deploy.html">Deploy agentic systems</a> &mdash; Launch your best configuration to production</div>
+    <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Return to instrumentation to refine your system</div>
+  </div>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>

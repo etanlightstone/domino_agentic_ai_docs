@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Agentic AI overview | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <div class="changed" data-change-label="Entire page is new &mdash; conceptual overview proposed in revision plan">
+    <h1>Agentic AI overview</h1>
+  </div>
+
+  <h2>What is an agent?</h2>
+
+  <p>An agent is a program that uses an LLM to decide what actions to take. Instead of following a fixed code path, an agent operates in a loop: it <strong>plans</strong> a sequence of actions based on an objective, <strong>executes</strong> them using tools and APIs, then <strong>reflects</strong> on the results. If the results don't meet the objective, it replans and retries. This plan&ndash;execute&ndash;reflect loop is what distinguishes an agent from a standard prompt-response interaction.</p>
+
+  <p>In concrete terms, an agent is typically a framework &mdash; LangChain, Pydantic AI, OpenAI Agents SDK, LlamaIndex, or custom code &mdash; wrapping orchestration logic around an LLM. The LLM is often deployed separately (via an API provider or a self-hosted endpoint). The framework handles the scaffolding: prompt construction, tool dispatch, memory management, and control flow. The LLM handles reasoning and generation.</p>
+
+  <h2>The spectrum of agentic systems</h2>
+
+  <p>Agentic systems exist on a spectrum:</p>
+
+  <ul>
+    <li><strong>Workflows</strong> &mdash; LLMs and tools follow predefined code paths. Examples: prompt chains, RAG pipelines, evaluator-optimizer loops. The execution graph is fixed at development time; the LLM fills in content but doesn't choose the path.</li>
+    <li><strong>Autonomous agents</strong> &mdash; an LLM dynamically directs its own tool usage and control flow, deciding at each step what to do next. The execution graph is determined at runtime.</li>
+  </ul>
+
+  <p>Most production systems fall somewhere in between. The building blocks are similar across the spectrum:</p>
+
+  <table>
+    <thead>
+      <tr><th>Component</th><th>Role</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Orchestrator</strong></td><td>Manages the reasoning loop (the framework code)</td></tr>
+      <tr><td><strong>LLM endpoint(s)</strong></td><td>Generation and decision-making</td></tr>
+      <tr><td><strong>Tools</strong></td><td>Databases, APIs, code execution, external services</td></tr>
+      <tr><td><strong>Memory / retrieval</strong></td><td>Context the agent needs &mdash; conversation history, vector stores, documents</td></tr>
+      <tr><td><strong>Multi-agent coordination</strong></td><td>Specialized agents delegating to each other</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Why agentic systems create new challenges</h2>
+
+  <p>With a conventional ML model you train on a dataset, evaluate against held-out examples, and deploy a static artifact. Inputs and outputs are well-defined. Agentic systems are different in several important ways:</p>
+
+  <h3>Non-deterministic execution paths</h3>
+  <p>The same input can produce different sequences of actions depending on model state, tool availability, and intermediate results. You can't evaluate an agent the way you'd evaluate a classifier.</p>
+
+  <h3>Compounding errors</h3>
+  <p>When an agent takes ten steps to complete a task, a mistake at step three can cascade. Understanding where things went wrong requires visibility into every step, not just the final output.</p>
+
+  <h3>Prompt and configuration sensitivity</h3>
+  <p>Small changes to system prompts, tool descriptions, or model selection can dramatically change agent behavior. Teams need a systematic way to compare configurations, not just inspect outputs.</p>
+
+  <h3>Production drift</h3>
+  <p>Agents in production encounter inputs their developers never anticipated. Without continuous monitoring, degradation goes unnoticed &mdash; and in multi-agent systems, behavioral drift in one agent can cascade across the entire coordination chain.</p>
+
+  <h3>Safety and compliance exposure</h3>
+  <p>Agentic systems take real actions: calling APIs, modifying data, interacting with users. This makes safety evaluation (hallucination detection, toxicity scoring, policy compliance) as important as quality evaluation. Traditional ML monitoring doesn't cover these dimensions.</p>
+
+  <h2>How Domino addresses these challenges</h2>
+
+  <p>Domino treats agentic systems as first-class objects in the ML lifecycle. The core abstraction is the <strong>trace</strong> &mdash; a structured record of an agent's full execution path, including every LLM call, tool invocation, and decision point, along with token usage, latency, and cost.</p>
+
+  <p>Domino builds on <a href="https://mlflow.org/docs/latest/genai/tracing/index.html">MLflow's tracing infrastructure</a> and integrates it into the broader ML lifecycle: project structure, governance workflows, deployment infrastructure, and production monitoring. The same trace format captures everything from a simple RAG pipeline to a fully autonomous multi-agent system.</p>
+
+  <p>The result is a single thread of observability that runs from your first prototype through production. Instead of separate tools for debugging, evaluation, and monitoring, every phase produces and consumes the same structured data.</p>
+
+  <p>To get started, see <a href="../index.html">Build and evaluate agentic systems</a> for the full development lifecycle.</p>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>
