@@ -1,0 +1,1318 @@
+WEBVTT
+
+1
+00:00:33.110 --> 00:00:34.110
+Etan Lightstone: Hey!
+
+2
+00:00:35.290 --> 00:00:36.489
+Andrea Lowe: Hey, how's it going?
+
+3
+00:00:37.570 --> 00:00:42.319
+Etan Lightstone: And, just busy working through stuff.
+
+4
+00:00:43.040 --> 00:00:43.820
+Andrea Lowe: Oh, yeah.
+
+5
+00:00:45.070 --> 00:00:45.670
+Andrea Lowe: Sir.
+
+6
+00:00:45.670 --> 00:00:48.360
+Etan Lightstone: Like, pile into your Slack this morning.
+
+7
+00:00:48.360 --> 00:00:55.939
+Andrea Lowe: Oh, no worries. I feel like I was just giving everyone less helpful answers than the engineers, like, at the same time, so hopefully.
+
+8
+00:00:55.940 --> 00:01:00.349
+Etan Lightstone: I don't know, I don't trust them, though, because… I mean, no offense to them, but,
+
+9
+00:01:00.760 --> 00:01:07.420
+Etan Lightstone: You and I are the only one who've been… well, maybe you and me and others in the field team are the only ones who've been trying to use this stuff for real.
+
+10
+00:01:07.810 --> 00:01:18.159
+Etan Lightstone: like, Neil and Bira know how the underlying, instrumentation works, but they have… they're not, like, doing agent development, and they're not dogfooding enough for me to try to…
+
+11
+00:01:18.160 --> 00:01:30.830
+Andrea Lowe: Yeah, and actually, I don't think you need… sorry, what I just think in Slack 2? I don't think you actually need it, I agree. It just says it in those docs, which confused me. In my first iterations, I did do that, like, call and knit tracing.
+
+12
+00:01:30.830 --> 00:01:35.140
+Etan Lightstone: Because I had to do it with just the SDK, we didn't have docs when I started developing.
+
+13
+00:01:35.140 --> 00:01:38.720
+Andrea Lowe: And it was, like… Hard to parse, so…
+
+14
+00:01:38.720 --> 00:01:40.440
+Etan Lightstone: You don't think we need the init thing?
+
+15
+00:01:40.440 --> 00:01:47.989
+Andrea Lowe: I don't think so, I think it works without that, I don't think I've used it, but it's weird that we have such a definitive statement in the SDK docs, and so I don't know if I'm, like…
+
+16
+00:01:48.100 --> 00:01:50.049
+Andrea Lowe: Missing something in the long run, so…
+
+17
+00:01:50.050 --> 00:01:54.130
+Etan Lightstone: Yeah, that's why… yeah, maybe Neil will chime in, but,
+
+18
+00:01:54.300 --> 00:01:57.470
+Etan Lightstone: Anyways, thanks for joining, and hi, Nick.
+
+19
+00:01:57.470 --> 00:01:58.300
+Nicholas Jablonski: Hey!
+
+20
+00:01:58.400 --> 00:02:02.069
+Etan Lightstone: I've been, like, slacking throughout the morning, trying to, like.
+
+21
+00:02:02.670 --> 00:02:07.660
+Etan Lightstone: Clean up different pockets of the docks, just, like, dusty areas.
+
+22
+00:02:07.950 --> 00:02:10.550
+Etan Lightstone: But, yeah, anyway, so I'll just get into it,
+
+23
+00:02:11.510 --> 00:02:20.930
+Etan Lightstone: what I'm deciding to do is, instead of the usual, like, giving a massive Google Doc of changes to Sandra to, like.
+
+24
+00:02:21.100 --> 00:02:23.440
+Etan Lightstone: Figure out how to, like, weave in
+
+25
+00:02:23.680 --> 00:02:30.410
+Etan Lightstone: I have recreated the entire docs related to Agentic AI as its own web app.
+
+26
+00:02:30.580 --> 00:02:34.759
+Etan Lightstone: that imitates our docs separately, so you can, like, truly A-B.
+
+27
+00:02:35.270 --> 00:02:39.250
+Etan Lightstone: And then, I think I'll just ask her to swap it, basically.
+
+28
+00:02:40.400 --> 00:02:41.020
+Nicholas Jablonski: Fence.
+
+29
+00:02:43.490 --> 00:02:44.270
+Etan Lightstone: So…
+
+30
+00:02:44.270 --> 00:03:03.250
+Nicholas Jablonski: I feel like I'm using, like, Claude for, like, sort of, like, one-off customer-facing document production, proposals, descriptions of how things work, architectures, and stuff like that, and my instinct from how good it's been at that is that, like, there's a point here where it should be actually writing most of the pros for the docs, right, and structuring the documents.
+
+31
+00:03:03.600 --> 00:03:13.700
+Etan Lightstone: Yeah, totally agree. And the irony, I don't know if it's ironic, proper irony, but, like, the irony of this is… Andrea…
+
+32
+00:03:14.320 --> 00:03:15.730
+Etan Lightstone: Did a bunch of work.
+
+33
+00:03:15.880 --> 00:03:35.709
+Etan Lightstone: That… and then, like, I didn't ask her, but as a favor, she asked Claude to, like, make a docs proposal. She… and that was, like, a Google Doc she sent to me. I, in turn, am using that Google Doc in Markdown format to get my Claude to do, like, a revision of proper docs. I'm still prompting the shit out of it, because I think there's still some things I want to do, but,
+
+34
+00:03:35.820 --> 00:03:42.789
+Etan Lightstone: So, I can't guarantee you, I've… I've probably written slightly fewer words than Claude, but I feel like we're almost breaking even.
+
+35
+00:03:43.010 --> 00:03:49.499
+Andrea Lowe: Yeah, sometimes with the prompting. Yeah, I just threw in, like, hey, these are all the things that are confusing, these are the docs, what do you suggest?
+
+36
+00:03:49.500 --> 00:03:53.029
+Etan Lightstone: Okay, anyways, without further ado, let me show you what I've done.
+
+37
+00:03:53.540 --> 00:03:57.700
+Etan Lightstone: Share… Okay.
+
+38
+00:03:58.010 --> 00:04:00.669
+Etan Lightstone: It looks, like, a little…
+
+39
+00:04:00.840 --> 00:04:03.390
+Etan Lightstone: thematically different, I don't know why.
+
+40
+00:04:04.280 --> 00:04:11.829
+Etan Lightstone: So, like, our existing docs look like this, okay? So this is, like, your landing page for Agentic Systems.
+
+41
+00:04:12.710 --> 00:04:17.489
+Etan Lightstone: This is the new landing page for Agentic Systems.
+
+42
+00:04:18.410 --> 00:04:24.189
+Etan Lightstone: The only reason you're seeing these red lines here is I wanted, for Sandra's sake.
+
+43
+00:04:25.020 --> 00:04:31.410
+Etan Lightstone: to, like, know the diffs, so I have this red line where it, explains what content is… all of this content is new.
+
+44
+00:04:31.850 --> 00:04:34.739
+Etan Lightstone: At this point, so it's no… Here's an example.
+
+45
+00:04:34.960 --> 00:04:36.460
+Etan Lightstone: That's also new.
+
+46
+00:04:37.310 --> 00:04:39.449
+Etan Lightstone: The, the, the… is this a diff?
+
+47
+00:04:39.450 --> 00:04:42.250
+Nicholas Jablonski: That's where you would look at a section, and it would say the diff, right?
+
+48
+00:04:42.250 --> 00:04:53.639
+Etan Lightstone: Exactly, it was supposed to be the diffs, but I blew it up, so… oh, here's one example. Okay, so, like, the original and the revised, but so much has changed that it's, like, lost track of the diffs, basically.
+
+49
+00:04:54.120 --> 00:04:58.020
+Etan Lightstone: So yeah, I was thinking for the, for the intro.
+
+50
+00:04:58.370 --> 00:05:05.009
+Etan Lightstone: We would include a diagram, we would include sample code right away, that's, like, my simple agent.
+
+51
+00:05:05.370 --> 00:05:08.810
+Etan Lightstone: example, the…
+
+52
+00:05:09.140 --> 00:05:25.129
+Etan Lightstone: I don't know if, like, anyone on the field team's gonna take this personally. I have no doubt that Andrea's or other people's agentic system sample code on the field team is, like, better. I'm sure it's better and more realistic.
+
+53
+00:05:25.140 --> 00:05:32.990
+Etan Lightstone: But one of the things I've noticed when demoing to customers is they also don't know much about how to, like, write
+
+54
+00:05:33.120 --> 00:05:49.269
+Etan Lightstone: framework agentic stuff. They're, like, beginners, both in terms of how domino agent stuff works, and how just generally you're supposed to author agents. So rather than teach them both at the same time, I just want to show them, like, the simplest agent imaginable.
+
+55
+00:05:49.610 --> 00:05:56.830
+Nicholas Jablonski: I completely agree with you, I'm on board with this. The demos that we show are not the right thing for the documentation to show someone when they're learning.
+
+56
+00:05:56.830 --> 00:06:02.129
+Etan Lightstone: Yeah, yeah. You do have that in a private repo, but I assume that'll go to… It's public now.
+
+57
+00:06:02.330 --> 00:06:05.320
+Andrea Lowe: I would move it to DominoDatalab.org.
+
+58
+00:06:05.730 --> 00:06:06.289
+Andrea Lowe: out of.
+
+59
+00:06:06.290 --> 00:06:12.429
+Etan Lightstone: Oh, yeah, yeah, it's public, and one of them is in Domino Data Lab. Yeah, the RAG one is…
+
+60
+00:06:12.430 --> 00:06:13.390
+Andrea Lowe: Okay, cool.
+
+61
+00:06:13.610 --> 00:06:21.650
+Etan Lightstone: And then I discovered I actually… I don't know how I did the other one, because I apparently don't have access to make my own repo in the Domino. I can, like…
+
+62
+00:06:21.780 --> 00:06:26.570
+Etan Lightstone: be invited, but I can't actually create a repo under Domino Data Labs, so I'll have to get someone to help me.
+
+63
+00:06:26.570 --> 00:06:29.549
+Nicholas Jablonski: If you try to transfer that to Domino Data Lab, does it work?
+
+64
+00:06:30.550 --> 00:06:32.429
+Etan Lightstone: What's the difference? I don't even… what do you mean?
+
+65
+00:06:32.430 --> 00:06:35.170
+Andrea Lowe: I think that works for… yeah, I think I'm the same, I have to transfer, I can't…
+
+66
+00:06:35.440 --> 00:06:40.220
+Nicholas Jablonski: If you go to your repo that is public under your user right now, and go to Settings.
+
+67
+00:06:40.580 --> 00:06:42.300
+Etan Lightstone: Okay, hold on, let me do this as…
+
+68
+00:06:43.260 --> 00:06:48.120
+Etan Lightstone: Sorry, the one browser is one GitHub account, and one browser is another. Sorry, let me just…
+
+69
+00:06:48.430 --> 00:06:49.210
+Nicholas Jablonski: Thunder.
+
+70
+00:06:49.210 --> 00:06:54.009
+Andrea Lowe: Yeah, and you can come back, I just, yeah, I think anything in the docs should be in the Domino Data Lab is my…
+
+71
+00:06:54.360 --> 00:06:54.990
+Etan Lightstone: Toast.
+
+72
+00:06:54.990 --> 00:07:04.570
+Nicholas Jablonski: even if you can't create a new repo, I think there's a different permission you have that allows you to transfer an existing repo, but I'm not an expert on GitHub permissions. But yeah, if you click Settings at the top.
+
+73
+00:07:05.750 --> 00:07:06.740
+Etan Lightstone: Yep.
+
+74
+00:07:07.300 --> 00:07:15.189
+Nicholas Jablonski: And then scroll to the bottom of the general settings page, all the way to the bottom, and then transfer ownership in the middle of the danger zone there.
+
+75
+00:07:18.170 --> 00:07:21.519
+Nicholas Jablonski: And then… you might need to single sign on.
+
+76
+00:07:22.160 --> 00:07:25.679
+Andrea Lowe: Oh, yours is disabled. Oh, because you need a single sign-on.
+
+77
+00:07:26.570 --> 00:07:29.380
+Nicholas Jablonski: Well, the only thing it's letting him single sign onto is Cerebra.
+
+78
+00:07:29.380 --> 00:07:30.210
+Andrea Lowe: Oh.
+
+79
+00:07:30.430 --> 00:07:36.060
+Andrea Lowe: Honestly, I would just send it to IT, maybe, and they'll… Just from…
+
+80
+00:07:37.190 --> 00:07:39.639
+Andrea Lowe: Or no, they would have to give you permissions, they can't transfer.
+
+81
+00:07:39.640 --> 00:07:47.270
+Nicholas Jablonski: I think you're not a member of… or the right kind of member of Domino Data Lab. If when you click Choose an owner there… oh, no, Domino Data Lab disabled by… okay.
+
+82
+00:07:47.840 --> 00:07:49.889
+Nicholas Jablonski: I don't see that. I must have a different role.
+
+83
+00:07:50.480 --> 00:07:59.230
+Etan Lightstone: Okay, I'll, I'll get someone to help me with that, no problem. Okay. But yeah, totally, agree, should not be my personal name thingy.
+
+84
+00:08:00.190 --> 00:08:03.929
+Etan Lightstone: Okay, so let me get back to, chrome here.
+
+85
+00:08:04.240 --> 00:08:08.659
+Andrea Lowe: Cool, but yeah, just the IT channel, they can help you out. That's where I see people with the CIT tickets.
+
+86
+00:08:08.890 --> 00:08:11.929
+Etan Lightstone: Yeah, yeah. Okay, where was it?
+
+87
+00:08:11.930 --> 00:08:13.900
+Andrea Lowe: Let me go back and get it.
+
+88
+00:08:15.220 --> 00:08:17.520
+Etan Lightstone: That's okay. Oh, I killed the tab.
+
+89
+00:08:17.520 --> 00:08:18.590
+Andrea Lowe: Yeah, it wasn't…
+
+90
+00:08:18.590 --> 00:08:20.080
+Etan Lightstone: Yeah, 8-7.
+
+91
+00:08:22.080 --> 00:08:33.460
+Etan Lightstone: Okay, so where was I? Oh yeah, so these are the sample ones, they're, like, ultra-dumb agents. If a customer's like, hey, I really want to see an example of, like, a complicated multi-agent system or whatever, then,
+
+92
+00:08:33.770 --> 00:08:45.270
+Etan Lightstone: or I shouldn't say complicated, more realistic than I think they would go with the field team examples. I wanted to just include a diagram. I think I need to tune this a little, but just to show right away that, like.
+
+93
+00:08:46.400 --> 00:08:52.230
+Etan Lightstone: This is… the top is, like, how your agent is more or less architected.
+
+94
+00:08:52.400 --> 00:08:54.919
+Etan Lightstone: The tracing sort of powers everything.
+
+95
+00:08:55.180 --> 00:09:10.560
+Etan Lightstone: And then, in your workflow, which is typically, you know, develop, evaluate, deploy, monitor, how it ties, it's a little small, but how it ties to, like, domino concepts. So, develop, you do in a workspace, evaluate, you do through domino jobs.
+
+96
+00:09:10.960 --> 00:09:25.249
+Etan Lightstone: you deploy from Experiment Manager, I should add more here, that… and it turns it into a domino agent, I should use those words. And then you monitor, and then it gives, like, a really quick, just, like, summary of that here.
+
+97
+00:09:27.670 --> 00:09:39.029
+Etan Lightstone: So it's a little bit overloading at the beginning, but, like, in theory, a customer could not even read anything else. Look at this, click on the sample code, and then be good to go, without even, like, getting into the detail.
+
+98
+00:09:39.280 --> 00:09:43.639
+Etan Lightstone: One of the suggestions from Andrea's work
+
+99
+00:09:43.900 --> 00:09:49.490
+Etan Lightstone: was to explain more just about what agents are. So, like, people don't really necessarily understand, like.
+
+100
+00:09:50.240 --> 00:10:02.100
+Etan Lightstone: what is an agent, like, different from an LLM, and, like, what's the value Domino provides? Like, more, like, basic stuff, so it added this new section based on Andrea's
+
+101
+00:10:02.720 --> 00:10:04.640
+Etan Lightstone: doc recommendation.
+
+102
+00:10:05.920 --> 00:10:11.530
+Etan Lightstone: I don't think we need to review this, but you're welcome to, I'll share it later. But it's basically just, like.
+
+103
+00:10:12.290 --> 00:10:18.040
+Etan Lightstone: more, like, background information, if you want to know, like, why are agents important, why is Domino?
+
+104
+00:10:18.210 --> 00:10:19.310
+Etan Lightstone: Gonna help there.
+
+105
+00:10:19.550 --> 00:10:20.490
+Etan Lightstone: You with me?
+
+106
+00:10:21.970 --> 00:10:40.879
+Nicholas Jablonski: I am with you, this is great. One thing I was gonna say is that it looks like throughout this, we are emphasizing, as we should, hosting the LLM inside Domino. I think, where possible, we should also talk as much as we can about managing connections to external LLM providers. There's like…
+
+107
+00:10:40.960 --> 00:10:54.999
+Nicholas Jablonski: use your bedrock, use your Cloud subscription, et cetera, kind of paths here, and I think it would be helpful for us to just also, weave in, like, the, how you authenticate to those, right, as you're building an agent in Domino, and the stuff we do around that.
+
+108
+00:10:55.620 --> 00:10:56.460
+Etan Lightstone: Yeah.
+
+109
+00:10:57.490 --> 00:10:59.520
+Etan Lightstone: Good idea. Let me see…
+
+110
+00:10:59.860 --> 00:11:04.679
+Etan Lightstone: it doesn't do a good job, like, it… one of the… I think I want to fix this…
+
+111
+00:11:04.880 --> 00:11:08.130
+Etan Lightstone: As well, like, the pathing is weird, so, like, the left nav…
+
+112
+00:11:08.430 --> 00:11:11.480
+Etan Lightstone: Guides you from develop, experiment, deploy, monitor.
+
+113
+00:11:11.730 --> 00:11:16.900
+Etan Lightstone: we, like, sprinkle in the hint around, by the way, you have to, like, host an LLM somehow.
+
+114
+00:11:17.100 --> 00:11:20.270
+Etan Lightstone: when you go here, I didn't, have it redo this page.
+
+115
+00:11:21.200 --> 00:11:23.809
+Etan Lightstone: Let's just see if it's sufficient.
+
+116
+00:11:26.930 --> 00:11:30.430
+Etan Lightstone: Mmm, yeah, so what we should do is rework this.
+
+117
+00:11:31.920 --> 00:11:37.719
+Etan Lightstone: Unless I misunderstand you, but like, yeah, this… this could be more like a choose-your-adventure on…
+
+118
+00:11:38.050 --> 00:11:41.690
+Etan Lightstone: Bedrock vendor LLMs, or use Domino to deploy your own.
+
+119
+00:11:42.070 --> 00:11:42.689
+Etan Lightstone: You think that would.
+
+120
+00:11:42.690 --> 00:11:44.630
+Nicholas Jablonski: Yeah, it's like, there's a…
+
+121
+00:11:45.620 --> 00:12:05.000
+Nicholas Jablonski: there's a minimum thing to do here, right, which is, like, in the docs where it says your agent depends on an LLM, we need to not just say that you run that LLM in Domino, we need to say you could run that LLM in Domino, or it could be one you already have. Just saying that is probably a good contextualization for what Domino supports. And then there's the, like.
+
+122
+00:12:05.000 --> 00:12:12.630
+Nicholas Jablonski: above minimum viable, which is giving them useful examples and information about how Domino manages their authentication and connection to the external provider.
+
+123
+00:12:13.350 --> 00:12:13.910
+Etan Lightstone: Okay.
+
+124
+00:12:14.710 --> 00:12:16.140
+Etan Lightstone: So that's here.
+
+125
+00:12:16.270 --> 00:12:19.080
+Nicholas Jablonski: Yeah. And then in the mentionables elsewhere.
+
+126
+00:12:19.120 --> 00:12:21.510
+Etan Lightstone: I guess, for, like, where we say LLM.
+
+127
+00:12:21.590 --> 00:12:22.460
+Nicholas Jablonski: Yeah. Fred?
+
+128
+00:12:24.920 --> 00:12:25.920
+Nicholas Jablonski: Okay,
+
+129
+00:12:27.260 --> 00:12:37.589
+Nicholas Jablonski: I think there's, like, a… I don't know, I'm trying to think about the, like, register and deploy LLMs, because there's, like… if AI Gateway is going away, which I think it probably will, then…
+
+130
+00:12:38.180 --> 00:12:58.180
+Nicholas Jablonski: what we're really talking about is your code, your agent code, right? Getting configured to send its prompts to your LLM provider of choice. And Domino's not going to do a ton for you there. Most people developing this will be able to figure out how to do that from their code. But, like, Domino environment variables could store your API key or something, like, giving them little pointers like that would be good.
+
+131
+00:12:59.140 --> 00:13:16.870
+Andrea Lowe: Yeah, I almost wonder if, like, the register and deploy LLM… I don't know, because that falls under deploy models, like, if the page for, like, run, Frontier API, some… like, if that appears as, like, another separate page here, or if it goes somewhere… and it's basically gonna be, like, very short, and just, like, oh, you can use environment variables, and…
+
+132
+00:13:16.960 --> 00:13:21.980
+Andrea Lowe: Like, you install the packages and the environment and, like, links to those, but… I don't know.
+
+133
+00:13:21.980 --> 00:13:24.099
+Etan Lightstone: Sorry, where would you imagine that would go?
+
+134
+00:13:24.270 --> 00:13:33.849
+Andrea Lowe: I just, because I worry, in, like, the register and deploy LLMs, like, that's in a deploy section, and this isn't really deploying, like, so I don't know if it would go into this flow, or if…
+
+135
+00:13:34.150 --> 00:13:37.900
+Andrea Lowe: It would go… I guess I'm, like, looking at the docs now.
+
+136
+00:13:38.460 --> 00:13:38.940
+Etan Lightstone: Ms.
+
+137
+00:13:38.980 --> 00:13:40.830
+Andrea Lowe: Standalone and develop or something.
+
+138
+00:13:40.830 --> 00:13:43.850
+Etan Lightstone: How about, how about, how about we,
+
+139
+00:13:45.390 --> 00:13:52.290
+Etan Lightstone: Yeah, I get it. How about we just make LLMs a step before development, given…
+
+140
+00:13:53.380 --> 00:14:04.590
+Etan Lightstone: an agent wraps an LLM, nothing's gonna work without the LLM, so maybe… do you think it would be just better to have, before develop just an LLM section, and it's all about
+
+141
+00:14:05.650 --> 00:14:08.340
+Etan Lightstone: agents rely on LLMs, you gotta… you gotta sort of…
+
+142
+00:14:09.140 --> 00:14:12.350
+Etan Lightstone: Decide what your approach is gonna be, you may wanna…
+
+143
+00:14:12.570 --> 00:14:13.890
+Andrea Lowe: I think that's a good idea.
+
+144
+00:14:13.890 --> 00:14:25.120
+Nicholas Jablonski: I think when you get into the develop section, one of the things we should be ready to talk about is that your agent experimentation during development will include things like
+
+145
+00:14:25.190 --> 00:14:41.460
+Nicholas Jablonski: swapping between models, swapping between model configurations, right? And that it would be nice if there was already a section that said, here's how to think about models that are used by your Domino agents. You can run them in Domino, or you can connect to them, and here's what that looks like with, you know, some simple examples.
+
+146
+00:14:41.460 --> 00:14:44.579
+Etan Lightstone: So you're saying you'd prefer that inline in the develop section, rather.
+
+147
+00:14:44.580 --> 00:14:56.959
+Nicholas Jablonski: No, I'm agreeing with you that having it as a sort of prerequisite to have already understood what Domino supports in terms of these LLMs is a good thing to know when you get into developing an agent in Domino.
+
+148
+00:14:56.960 --> 00:14:58.259
+Etan Lightstone: Okay, cool, cool.
+
+149
+00:14:59.310 --> 00:15:03.139
+Etan Lightstone: Makes sense to me. I was… you and I should have another…
+
+150
+00:15:04.240 --> 00:15:07.570
+Etan Lightstone: private debate on the Gateway, I still think it's…
+
+151
+00:15:08.110 --> 00:15:13.390
+Etan Lightstone: Short-sighted to kill it, rather than invest, but we can save that for later.
+
+152
+00:15:14.630 --> 00:15:25.000
+Nicholas Jablonski: I can imagine there's merits to that. I am less, I think, committed to it than Elprin is, but I don't think I'm going to be able to convince him to keep out.
+
+153
+00:15:25.750 --> 00:15:28.710
+Etan Lightstone: Yeah, well, we'll talk later.
+
+154
+00:15:28.880 --> 00:15:42.090
+Etan Lightstone: Okay, so, the develop section, I also changed and, like, simplified quite a bit. I'm gonna show you the original, just so you can see. This is what I think Andrea and I talked about the most this morning.
+
+155
+00:15:42.330 --> 00:15:44.190
+Etan Lightstone: develop, I'm sorry.
+
+156
+00:15:44.580 --> 00:15:46.840
+Etan Lightstone: I just got… Lost.
+
+157
+00:15:49.090 --> 00:15:53.559
+Etan Lightstone: Where do I go?
+
+158
+00:15:53.940 --> 00:15:54.890
+Etan Lightstone: Bullet.
+
+159
+00:15:55.200 --> 00:15:56.980
+Etan Lightstone: Let me just, let me just get back to…
+
+160
+00:15:57.200 --> 00:16:05.269
+Etan Lightstone: Oh, here it is, okay. So, in this section, it's a bit of a mess. We've got, like, prerequisites you no longer even need if you've got 6.2.
+
+161
+00:16:05.580 --> 00:16:10.659
+Etan Lightstone: the, like, decorator… is mentioned here…
+
+162
+00:16:10.990 --> 00:16:17.040
+Etan Lightstone: But then it, like, talks about, like, the domino run thing you gotta wrap it inside as, like, an agnostic…
+
+163
+00:16:17.290 --> 00:16:28.699
+Etan Lightstone: thing, but it's actually not, it's all… it should all be together. Then it talks about YAML configuration, but then… and here it's saying, oh, and also you can add aggregated metrics in the run… it's just like…
+
+164
+00:16:29.050 --> 00:16:29.660
+Etan Lightstone: It's split.
+
+165
+00:16:29.660 --> 00:16:32.140
+Nicholas Jablonski: Why would I do any of these things? Yeah, like…
+
+166
+00:16:32.140 --> 00:16:37.949
+Etan Lightstone: So, I… I… what I ended up doing was I ended up making, like, just a bigger code block that explains it all.
+
+167
+00:16:38.310 --> 00:16:47.879
+Etan Lightstone: so, so basically, it's develop agensic systems. Step one is get your instrumentation and your evaluation
+
+168
+00:16:48.180 --> 00:16:53.219
+Etan Lightstone: script ready. Step 2 gives you a little more detail on how…
+
+169
+00:16:53.310 --> 00:16:57.389
+Etan Lightstone: how the evaluation function should work, like, if you're gonna use an LLM judge and stuff.
+
+170
+00:16:57.390 --> 00:17:13.479
+Etan Lightstone: And then step three is, which doesn't get explained at all in our docs, is, like, more about, like, the fact that we're expecting you to do this in a domino job, and, like, we're expecting you to run across a test set dataset, where you, like, get traces piling up inside your…
+
+171
+00:17:13.530 --> 00:17:18.399
+Etan Lightstone: your run, which we'll rename one day soon, hopefully. But, so that's basically what this is.
+
+172
+00:17:19.079 --> 00:17:25.470
+Andrea Lowe: Yeah, because I think everyone would probably do it in a workspace, go to deploy, see the little grayed-out thing, and then come back, so this is great.
+
+173
+00:17:25.470 --> 00:17:31.690
+Etan Lightstone: Exactly, exactly. So, yeah, here it's just, like, it's a little bit more meat and less chopped up.
+
+174
+00:17:31.690 --> 00:17:37.199
+Nicholas Jablonski: But it's just putting it all in one place, like, you gotta decorate the thing that invokes the agent.
+
+175
+00:17:37.230 --> 00:17:47.740
+Etan Lightstone: somewhere higher up in your execution, you need to have a domino run wrapped, and it's all sort of explained up here. I also list the frameworks here, which we didn't do in the docs.
+
+176
+00:17:47.740 --> 00:17:48.330
+Andrea Lowe: Yeah.
+
+177
+00:17:49.470 --> 00:17:59.569
+Etan Lightstone: In, yeah, so it's all, like, in one chunk now. There's a sort of… I want to pull this out to an advanced area, but, let me keep going.
+
+178
+00:18:00.800 --> 00:18:15.470
+Etan Lightstone: metrics aggregate automatically, that's why I don't think this is important to put here. Okay. Step 2 is all about, like, your judge and the evaluator, and this is where I kind of unapologetically say, like, listen, Domino did not yet make
+
+179
+00:18:15.800 --> 00:18:21.000
+Etan Lightstone: a UI-guided experience for evaluations, so, like, you just gotta make your own script.
+
+180
+00:18:22.150 --> 00:18:22.650
+Nicholas Jablonski: Yep.
+
+181
+00:18:22.650 --> 00:18:41.060
+Etan Lightstone: And then, the last step, like I said, is, like, you gotta do this in a domino job, once it's ready. You know, have a CSV of questions, generate multiple traces, iterate over that CSV. So, I wanted to really, like, spell that out, because I've… yeah, what Andrea said, like, someone's gonna run this in a workspace.
+
+182
+00:18:41.630 --> 00:18:47.539
+Etan Lightstone: Like, they're gonna see one run with one trace in it that they can't do anything with, and so yeah, that was a bit of a gap.
+
+183
+00:18:47.790 --> 00:18:52.839
+Andrea Lowe: Could you scroll up a little bit, though, because I think you have that… So, hmm.
+
+184
+00:18:53.300 --> 00:18:58.400
+Andrea Lowe: You can, I mean… like, you can do it all from Workspace, you just can't deploy, so I might.
+
+185
+00:18:58.400 --> 00:18:59.259
+Etan Lightstone: Oh, yeah, yeah, yeah.
+
+186
+00:18:59.260 --> 00:19:00.210
+Andrea Lowe: interior there.
+
+187
+00:19:00.210 --> 00:19:01.450
+Etan Lightstone: Yeah, yeah, you're right, hold on.
+
+188
+00:19:01.450 --> 00:19:08.650
+Andrea Lowe: But that would be it. I was just like, oh yeah, you can, like, still do this in a workspace, but if you want to be able to deploy from the experiment.
+
+189
+00:19:09.060 --> 00:19:13.330
+Andrea Lowe: itself, Then… You need to do it a job.
+
+190
+00:19:14.730 --> 00:19:24.000
+Nicholas Jablonski: If we expect people doing that, though, like, I think you're right, Andrea, that we should be clear about it, but we should also… it would be good for users to get in the habit of running these evaluations and jobs.
+
+191
+00:19:24.350 --> 00:19:25.490
+Andrea Lowe: True.
+
+192
+00:19:28.670 --> 00:19:30.379
+Andrea Lowe: And then maybe link them to the, like…
+
+193
+00:19:30.700 --> 00:19:35.459
+Andrea Lowe: run job from workspace, because you kind of have, like, oh, you develop in a workspace.
+
+194
+00:19:35.590 --> 00:19:38.780
+Nicholas Jablonski: So at least it's like, let me find this… Yeah, that's true.
+
+195
+00:19:41.050 --> 00:19:42.119
+Andrea Lowe: Do we have that in Dallas.
+
+196
+00:19:42.120 --> 00:19:50.030
+Etan Lightstone: That is the mandatory way to keep lineage intact and be able to deploy.
+
+197
+00:19:50.380 --> 00:19:52.139
+Etan Lightstone: from the run.
+
+198
+00:19:52.400 --> 00:19:53.879
+Etan Lightstone: What was the last thing you said?
+
+199
+00:19:55.020 --> 00:19:58.259
+Andrea Lowe: There, I'm just trying to see if we even have it in the docs.
+
+200
+00:19:58.440 --> 00:20:01.980
+Nicholas Jablonski: She said that, I think… We should… Oh, oh, right.
+
+201
+00:20:01.980 --> 00:20:03.880
+Etan Lightstone: run the job from the workspace. From the workspace.
+
+202
+00:20:03.880 --> 00:20:04.290
+Nicholas Jablonski: Yeah.
+
+203
+00:20:04.290 --> 00:20:10.049
+Andrea Lowe: Yeah, like, just to… because we talk about using the workspace for develop, but I don't know if we have a doc on that, actually.
+
+204
+00:20:10.380 --> 00:20:12.340
+Nicholas Jablonski: This is a spot where, like, little…
+
+205
+00:20:12.510 --> 00:20:20.840
+Nicholas Jablonski: 30-second videos, like a series of them, showing, like, the sort of most important concepts might be useful, right? Like…
+
+206
+00:20:21.720 --> 00:20:38.830
+Nicholas Jablonski: if you've got a 10-step video series, each of which shows, like, your basic, like, oh, I'm gonna set up access to my LLM, here's a couple ways I could do it, and you get to this part, right? It's like, oh, I'm gonna run evaluations, I've been working on them in my workspace. There's a run job button right up here, right? Sync your files, then click that, right? Then run your, evaluation job.
+
+207
+00:20:39.020 --> 00:20:39.620
+Etan Lightstone: Yep.
+
+208
+00:20:39.990 --> 00:20:46.190
+Andrea Lowe: I wonder if Docs… they could even host videos online. I know… Like, our web person.
+
+209
+00:20:46.190 --> 00:20:49.629
+Nicholas Jablonski: They're so hard to maintain, historically, that we've tried to avoid doing that, but…
+
+210
+00:20:49.630 --> 00:21:02.139
+Andrea Lowe: Yeah, we… I can make you some… I mean, at least what we could do here, at minimum, is, like, a screenshot with the workspace and the run job, because we don't have, like, any other docs, so I think that would be really helpful in the interim, and then…
+
+211
+00:21:02.330 --> 00:21:05.840
+Andrea Lowe: As, like, a next iteration, Atana can make you, like, little videos.
+
+212
+00:21:09.050 --> 00:21:10.950
+Etan Lightstone: Yeah, hold on a sec, let me just capture…
+
+213
+00:21:24.340 --> 00:21:28.179
+Etan Lightstone: Yep, just got that. Okay, so let me just show you…
+
+214
+00:21:28.380 --> 00:21:32.599
+Etan Lightstone: I'm taking notes in my Cloud chat, so check this out.
+
+215
+00:21:33.710 --> 00:21:34.370
+Nicholas Jablonski: Nice.
+
+216
+00:21:34.370 --> 00:21:36.990
+Etan Lightstone: Where am I?
+
+217
+00:21:37.860 --> 00:21:39.970
+Etan Lightstone: You can run… okay, did it change it?
+
+218
+00:21:39.970 --> 00:21:40.620
+Nicholas Jablonski: Yeah.
+
+219
+00:21:40.620 --> 00:21:53.339
+Etan Lightstone: Oh, here's the screenshot that you asked for. It'll, it'll… obviously it's not taking it, but it's a placeholder, and then you can run your evaluation script from workspace to gut check, but to preserve full lineage and enable deployment, run as a job.
+
+220
+00:21:53.640 --> 00:21:54.190
+Andrea Lowe: Yeah.
+
+221
+00:21:55.750 --> 00:21:57.040
+Etan Lightstone: There you go. Okay.
+
+222
+00:21:57.040 --> 00:21:57.590
+Andrea Lowe: Cop.
+
+223
+00:21:58.540 --> 00:22:03.050
+Etan Lightstone: Yeah, I like that a lot. Okay, so, Experiment Manager…
+
+224
+00:22:03.420 --> 00:22:08.270
+Etan Lightstone: I… I'm not gonna get in too much, but it's… it's essentially,
+
+225
+00:22:09.600 --> 00:22:14.919
+Etan Lightstone: the purpose of this is mostly to show off the UI, for, like, looking at traces, comparing runs, etc.
+
+226
+00:22:17.710 --> 00:22:24.109
+Etan Lightstone: Oh, but I added this new thing, which we don't have in the docs. I wanted to make it, like, dumbly clear.
+
+227
+00:22:24.450 --> 00:22:36.189
+Etan Lightstone: that you click this button. Like, we don't actually spell it out to customers, and previously, Andrea, as you probably saw, like, this button didn't exist before. You had to, like, use that, like, annoying
+
+228
+00:22:36.300 --> 00:22:38.909
+Etan Lightstone: Triple dot menu from, like, the list of runs.
+
+229
+00:22:39.130 --> 00:22:41.910
+Etan Lightstone: So, I just wanted to point that out.
+
+230
+00:22:42.030 --> 00:22:44.650
+Etan Lightstone: It was a s… A small bugaboo.
+
+231
+00:22:45.230 --> 00:22:45.980
+Etan Lightstone: Mmm.
+
+232
+00:22:45.980 --> 00:22:50.199
+Andrea Lowe: other thing… I don't know if it would be helpful. I will pull…
+
+233
+00:22:50.890 --> 00:22:59.649
+Andrea Lowe: see the visual is… I, like, if there's a, like, because I know a lot of people probably want to pull some of that info, like token or latency or whatever, into their code.
+
+234
+00:23:00.620 --> 00:23:07.170
+Andrea Lowe: And so if, like, a small code section on that is, like, I don't know if that'd be, like, an advanced usage or something, but I have…
+
+235
+00:23:07.990 --> 00:23:26.119
+Andrea Lowe: This is, like… so I have a thing, I mean, it kind of uses, like, ML flow code, but it's, like, get spans, and then span attributes, and then you can pull, like, tokens, latencies, etc. Reasoning, tool calls, and so you can go back and analyze this, and that is probably a thing people would want to do, is, like, not just look at it here, but pull it into, like, a notebook or something.
+
+236
+00:23:26.270 --> 00:23:27.369
+Etan Lightstone: Oh, oh, sorry.
+
+237
+00:23:27.630 --> 00:23:28.570
+Andrea Lowe: adding…
+
+238
+00:23:28.870 --> 00:23:34.999
+Etan Lightstone: It took me a minute to understand what you're even talking about. So you're just saying, as an alternative to using the Traces dashboard.
+
+239
+00:23:35.260 --> 00:23:36.580
+Etan Lightstone: that you can…
+
+240
+00:23:37.020 --> 00:23:42.949
+Etan Lightstone: use the MLflow API as a data… as data to, like, pull into your own… whatever you want to do.
+
+241
+00:23:42.950 --> 00:23:48.660
+Andrea Lowe: Because I like to aggregate it, I can share, like, quickly, but it basically…
+
+242
+00:23:52.000 --> 00:23:54.020
+Andrea Lowe: So, like, I pull in…
+
+243
+00:23:54.410 --> 00:24:00.079
+Andrea Lowe: Sorry, I'll go really fast, but I pull in, obviously, like, the stuff from all of the traces, and then I can do, like…
+
+244
+00:24:00.370 --> 00:24:06.209
+Andrea Lowe: Look at, that's, like, token usage by pipeline component…
+
+245
+00:24:06.210 --> 00:24:06.710
+Etan Lightstone: Yeah, yeah.
+
+246
+00:24:06.710 --> 00:24:08.270
+Andrea Lowe: efficiency…
+
+247
+00:24:08.270 --> 00:24:13.030
+Etan Lightstone: You're using the MLflow APIs to pull in that same data, but, like, doing your own analysis, right?
+
+248
+00:24:13.030 --> 00:24:17.559
+Andrea Lowe: Yeah, and so just, like, a very short thing, I mean, this is, like, we would do something much…
+
+249
+00:24:17.790 --> 00:24:29.890
+Andrea Lowe: better, but just kind of getting, like, token usage, like, just so they know, like, hey, I can pull all that stuff from my traces into my code and aggregate it, because I do feel like that's going to be a question for a lot of people at some point.
+
+250
+00:24:30.200 --> 00:24:37.970
+Etan Lightstone: Yeah, if you think it's worth it, I trust, so, like, what I would… prefer…
+
+251
+00:24:38.600 --> 00:24:46.810
+Etan Lightstone: Is, like, one note at the bottom of the, like, experiment dashboard, just saying, hey, like, you can aggregate metrics however you want by using
+
+252
+00:24:47.260 --> 00:24:50.460
+Etan Lightstone: our APIs, and then can I link to your…
+
+253
+00:24:50.710 --> 00:24:58.249
+Etan Lightstone: example somehow? That would be, like, really… because you know how GitHub will even render a notebook for you now, right? If you have this in…
+
+254
+00:24:59.250 --> 00:25:14.119
+Andrea Lowe: Yeah, we could… we could… this is a very complicated one that, like, goes into a lot of stuff that you probably don't need. But we could either make a simple one to add onto yours, honestly, or you could just give, like, a two-line, like, snippet, like, this is how you call, and then link to the ML flow docs.
+
+255
+00:25:14.240 --> 00:25:17.460
+Andrea Lowe: But I don't know, I mean, and Nick, maybe, what do you think? I just…
+
+256
+00:25:17.460 --> 00:25:23.580
+Etan Lightstone: I'm just worried that, like, it's gonna be overwhelming. I'm like… but more snippets for, like, these sort of advanced…
+
+257
+00:25:23.990 --> 00:25:28.450
+Andrea Lowe: Yeah, I could make a simple one for your simple agent.
+
+258
+00:25:29.490 --> 00:25:33.170
+Etan Lightstone: Okay, I mean, I think this is… this is really cool, and I like the charts.
+
+259
+00:25:33.910 --> 00:25:38.220
+Andrea Lowe: Yeah, we could add this to yours, this is, like, in the more complicated one, but…
+
+260
+00:25:38.880 --> 00:25:43.480
+Andrea Lowe: I just, I foresee that coming up, and it'd be nice to just have it in the docs to point towards.
+
+261
+00:25:44.540 --> 00:25:47.740
+Nicholas Jablonski: Sorry, I got distracted by customer questions in Slack, what are we talking about?
+
+262
+00:25:48.110 --> 00:25:59.770
+Andrea Lowe: Oh, I was just thinking maybe we add a note, that talks about how to then pull… because you have all these individual traces normally you'd click through, but I like to pull that data into a notebook and visualize it in, like, an aggregated way, and so just adding that…
+
+263
+00:25:59.770 --> 00:26:05.279
+Nicholas Jablonski: That's what the code snippet under the run evaluations thing does, right, is it pulls all that data into your…
+
+264
+00:26:05.280 --> 00:26:23.539
+Andrea Lowe: This, yeah, this was just, like, more in the experiments, and it shows you how to, like, break it down by span types, so if you want to pull all the tokens, all the latencies, all the whatever, and so just, like, a quick note on, like, aggregating across span types, all the reasoning. So I was thinking… Tom was thinking code snippets might be too much, and maybe we should just link to a notebook that does it.
+
+265
+00:26:23.800 --> 00:26:26.699
+Andrea Lowe: And so obviously I could just build that for this simple agent.
+
+266
+00:26:28.190 --> 00:26:33.370
+Etan Lightstone: Yeah, I'm a little worried about overwhelming them, so, like, but yeah, I think what I was suggesting
+
+267
+00:26:33.880 --> 00:26:45.879
+Etan Lightstone: It doesn't sound like we all agree, but what I was suggesting was, like, the Experiment Manager section is mostly just, like, pictorial. It's showing you how to use Experiment Manager, assuming you've captured your traces.
+
+268
+00:26:46.020 --> 00:26:50.889
+Etan Lightstone: You know, and… Sorry, you can't see the screenshots here, but, like…
+
+269
+00:26:52.430 --> 00:26:56.550
+Etan Lightstone: Yeah, this section's just moved on to Domino UI, basically.
+
+270
+00:26:56.660 --> 00:27:06.320
+Etan Lightstone: If we really think that it's a inevitability that customers outgrow the experiment dashboard, and they're gonna wanna make, like, notebooks that…
+
+271
+00:27:06.460 --> 00:27:13.629
+Etan Lightstone: pull in from the MLflow data and do their own, sort of, mix-up of analytical stuff.
+
+272
+00:27:13.730 --> 00:27:29.270
+Etan Lightstone: My suggestion was, like, I'm just… there's so many code snippets, I'm, like, a little weary, so I was thinking we can say, like, no, if you want to do your own analysis, click here to see a really cool notebook example, and then that whole notebook is, like, in GitHub somewhere. Yeah, I think that's how I would do it.
+
+273
+00:27:29.270 --> 00:27:33.670
+Andrea Lowe: Yeah, if you scroll down, actually, because under manual, you had… like, this…
+
+274
+00:27:33.670 --> 00:27:34.150
+Etan Lightstone: Oh!
+
+275
+00:27:34.150 --> 00:27:41.560
+Andrea Lowe: results, and so I think it would fit there as, like, this, obviously, you can export those, but, like, above it is, like, you can use the code to pull, and then we…
+
+276
+00:27:42.060 --> 00:27:55.620
+Andrea Lowe: the notebook. So, I'll, I'll try to do it maybe today, but maybe Monday. I'll just add a simple notebook to your agent. Actually, once you get it pushed into Domino Data, or no, it doesn't really matter. I'll just… I'll pull it from your code now and do it.
+
+277
+00:27:55.620 --> 00:28:06.639
+Etan Lightstone: One of mine is already in the right domino. Like, I think the agent one, sorry, the RAG agent is in the domino one, and the simple one that's not RAG is not, so you could do that right now.
+
+278
+00:28:06.640 --> 00:28:07.920
+Andrea Lowe: I'll add it to the rag.
+
+279
+00:28:07.950 --> 00:28:08.970
+Etan Lightstone: Yeah.
+
+280
+00:28:09.010 --> 00:28:11.309
+Andrea Lowe: And I'll make it a really simple notebook.
+
+281
+00:28:12.380 --> 00:28:19.010
+Etan Lightstone: Excellent. Alright, so then there's one last piece that I'm, like, kind of worried about, which is,
+
+282
+00:28:20.390 --> 00:28:29.949
+Etan Lightstone: One of the feedback things I was… I think I got from both of you, actually, was that when you… once you've deployed your agent, there's, like, a whole different way you're supposed to evaluate.
+
+283
+00:28:30.310 --> 00:28:34.779
+Etan Lightstone: and there's that button you click, and it gives you, like, a little code snippet in the UI? You remember that?
+
+284
+00:28:37.660 --> 00:28:41.399
+Etan Lightstone: Oh, actually, so there's that, that, there's that, and I wanna…
+
+285
+00:28:41.960 --> 00:28:44.210
+Etan Lightstone: I don't think I did anything for that here.
+
+286
+00:28:45.710 --> 00:28:50.890
+Etan Lightstone: I did this search thing, but I… I just want to make it clear…
+
+287
+00:28:51.100 --> 00:28:57.550
+Etan Lightstone: Maybe I'll include a screenshot here that just shows, like, where you click to see the agent version and all that, just to tie it off.
+
+288
+00:28:57.550 --> 00:29:01.590
+Andrea Lowe: You definitely need that… yeah, the agent ID is gonna be, like, a big…
+
+289
+00:29:02.210 --> 00:29:04.130
+Etan Lightstone: Yeah, and in fact, the agent IDs…
+
+290
+00:29:05.460 --> 00:29:13.279
+Etan Lightstone: Yeah, it's sort of not spelled out enough, so I wanna… I still have to work on this part, and so I wanna… I wanna make that clear. There's…
+
+291
+00:29:13.690 --> 00:29:17.370
+Etan Lightstone: One more thing… .
+
+292
+00:29:17.530 --> 00:29:20.700
+Andrea Lowe: Oh, and I like that you added the SDK underneath…
+
+293
+00:29:21.630 --> 00:29:26.630
+Andrea Lowe: Cause, yeah, it's, like, hard to find, so that'd be cool if it was… Linked here.
+
+294
+00:29:26.870 --> 00:29:27.600
+Etan Lightstone: Oh, yeah.
+
+295
+00:29:28.390 --> 00:29:30.740
+Andrea Lowe: But it might not be work in the docs, but yeah, either way.
+
+296
+00:29:31.240 --> 00:29:35.220
+Etan Lightstone: Yeah, this is, like, implying that she'll, like, shove it literally into the docks.
+
+297
+00:29:35.460 --> 00:29:37.499
+Andrea Lowe: Which I suppose we probably wouldn't do.
+
+298
+00:29:37.500 --> 00:29:39.130
+Etan Lightstone: You wouldn't wanna do, yeah.
+
+299
+00:29:39.300 --> 00:29:43.189
+Etan Lightstone: This could just have an outlink, like, you know what I'm talking about?
+
+300
+00:29:43.450 --> 00:29:44.230
+Etan Lightstone: Like, the…
+
+301
+00:29:44.230 --> 00:29:45.719
+Andrea Lowe: Oh, yeah, to the…
+
+302
+00:29:45.720 --> 00:29:47.630
+Etan Lightstone: an outlink to the SDK area.
+
+303
+00:29:48.080 --> 00:29:48.779
+Etan Lightstone: Yeah, because.
+
+304
+00:29:48.780 --> 00:29:53.939
+Andrea Lowe: They're, like, buried in the Python library docs, which is also a little confusing, because it's like…
+
+305
+00:29:53.940 --> 00:29:56.820
+Etan Lightstone: Yeah. Not on the REST API, so yeah, I think that would be…
+
+306
+00:29:57.580 --> 00:30:01.960
+Andrea Lowe: Or, if they could make it its own page in the API docs, like this, that would be amazing.
+
+307
+00:30:02.490 --> 00:30:03.950
+Etan Lightstone: For agent SDK, okay.
+
+308
+00:30:04.230 --> 00:30:07.199
+Etan Lightstone: I'll… I'll think about that.
+
+309
+00:30:07.390 --> 00:30:10.199
+Etan Lightstone: One more thing that I… I'm not…
+
+310
+00:30:10.430 --> 00:30:15.479
+Etan Lightstone: covering yet, which I don't know where you want that to show up exactly.
+
+311
+00:30:15.970 --> 00:30:27.000
+Etan Lightstone: is, you The sort of failing case of when you have to manually instrument spans.
+
+312
+00:30:28.360 --> 00:30:32.839
+Etan Lightstone: I don't think… I don't think I talk about that anywhere. I don't think your doc that you shared, actually.
+
+313
+00:30:34.240 --> 00:30:38.040
+Andrea Lowe: No, because… Well, it sounds like…
+
+314
+00:30:38.470 --> 00:30:42.170
+Andrea Lowe: They might just add span type to the tracing decorator, which would…
+
+315
+00:30:43.870 --> 00:30:46.899
+Andrea Lowe: be fine. We probably still want to add, like, a little thing, like…
+
+316
+00:30:47.290 --> 00:31:05.669
+Andrea Lowe: hey, if you're writing custom code, or… or depending on… like, just depending on how you're doing it, I actually was writing tool calls the other day with OpenAI, but that don't use the OpenAI framework, and ended up going back and doing the same thing with MLflow. So probably, it would be there in the develop, and it would just…
+
+317
+00:31:06.310 --> 00:31:07.120
+Andrea Lowe: Hmm.
+
+318
+00:31:07.330 --> 00:31:23.790
+Etan Lightstone: I think what I'll do is I'll say in this sentence here, that shows all the framework stuff common delimited, that, in cases where auto-tracing isn't covering everything, click here to the advanced section, and then at the bottom, I'll have an advanced section.
+
+319
+00:31:24.150 --> 00:31:25.210
+Andrea Lowe: Perfect, yeah.
+
+320
+00:31:25.210 --> 00:31:29.670
+Etan Lightstone: And that will show, like, these are the ones we tested, and then this is how you do…
+
+321
+00:31:29.880 --> 00:31:32.090
+Etan Lightstone: Manual span?
+
+322
+00:31:32.450 --> 00:31:33.510
+Etan Lightstone: Yep. Stuff.
+
+323
+00:31:34.050 --> 00:31:44.839
+Etan Lightstone: But then we'll swap it once the SDK has the better way to decorate. Do you know what I'm saying? So, like, for now, it'll be the ugly MLflow stuff here, but then we'll switch it out when the SDK is ready.
+
+324
+00:31:45.010 --> 00:32:04.490
+Andrea Lowe: That's amazing, yeah, that would solve it all. Yeah, I like that. Because I was like, yeah, this is a complicated thing, but it's nice to have somewhere, so I like that, putting it, just a link, and then it brings you down to the advanced. Very, very nice. Yeah, that makes, like, everything so clear compared to where we were. So I think that'll help a ton once people start using it, is, like, this layout for the docs.
+
+325
+00:32:04.840 --> 00:32:20.309
+Etan Lightstone: Okay, cool, cool. Alright, thanks for all your help. Once I have that copy of our docs published for Sandra, I'll also share it with you. I'm not expecting anything else from you, I know you're busy, but if you… if some, like, amazing idea comes to you and you click it and want to give me more feedback, feel free.
+
+326
+00:32:20.750 --> 00:32:27.230
+Andrea Lowe: Okay, yeah, no, I mean, this is looking great, but I'll, like, try to read through it if I'm not, like, pulled into something else. So yeah, perfect, thank you for putting this together.
+
+327
+00:32:27.230 --> 00:32:30.430
+Etan Lightstone: Yeah, I think I got enough from you guys, but I'll share the link anyways.
+
+328
+00:32:30.430 --> 00:32:33.439
+Andrea Lowe: Awesome, yeah, I appreciate it. Yeah, well, have a great weekend. Good to see ya.
+
+329
+00:32:33.440 --> 00:32:34.330
+Etan Lightstone: Thanks, you too.
+
