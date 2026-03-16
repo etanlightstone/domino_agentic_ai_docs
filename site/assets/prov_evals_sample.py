@@ -1,4 +1,4 @@
-# see this for more complete example: https://github.com/etanlightstone-domino/simple_domino_agent/blob/main/prod_eval_simplest_agent.py
+# see this for more complete example: https://github.com/dominodatalab/simple_domino_agent/blob/main/prod_eval_simplest_agent.py
 from domino.agents.tracing import search_agent_traces
 from domino.agents.logging import log_evaluation
 

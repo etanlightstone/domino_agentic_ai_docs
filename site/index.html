@@ -43,7 +43,7 @@
     <div class="info">
       <p><strong>Quick start.</strong> Clone a working example to see the full workflow in action:</p>
       <ul>
-        <li><a href="https://github.com/etanlightstone-domino/simple_domino_agent">simple_domino_agent</a> &mdash; Minimal agent with tool calls, tracing, evaluation, and deployment</li>
+        <li><a href="https://github.com/dominodatalab/simple_domino_agent">simple_domino_agent</a> &mdash; Minimal agent with tool calls, tracing, evaluation, and deployment</li>
         <li><a href="https://github.com/dominodatalab/rag-agent-demo">rag-agent-demo</a> &mdash; RAG agent with ChromaDB, same Domino instrumentation patterns</li>
       </ul>
     </div>
@@ -57,7 +57,7 @@
     </div>
 
     <ol>
-      <li><strong><a href="pages/llm-setup.html">Set up LLM access</a></strong>. Connect to your LLM provider of choice &mdash; an external API (OpenAI, Anthropic, Bedrock, Azure) or a Domino-hosted model. Store credentials as Domino environment variables.</li>
+      <li><strong><a href="pages/llm-setup.html">Set up LLM access</a></strong>. Connect to your LLM provider of choice &mdash; an external API (OpenAI, Anthropic, Bedrock, Azure) or a <strong>Domino-hosted Model Endpoint</strong>. Store credentials as Domino environment variables.</li>
       <li><strong><a href="pages/develop.html">Develop</a></strong> in a <strong>Domino Workspace</strong>. Write your agent code using any framework, add <code>@add_tracing</code> with inline evaluators to instrument it, and prepare test data for your agent configuration.</li>
       <li><strong><a href="pages/develop.html#step-3">Evaluate</a></strong> by running your evaluation script as a <strong>Domino Job</strong>. Each Job creates an experiment run in the Experiment Manager, capturing traces with evaluation scores for your agent configuration. Runs aggregate evaluation results across all traces.</li>
       <li><strong><a href="pages/experiment.html">Compare and deploy</a></strong> in the <strong>Experiment Manager</strong>. Compare runs (different agent versions/configurations) and individual traces within runs. Deploy directly from any experiment run that originated from a Job &mdash; Domino tracks full lineage between dev and production (commit, agent config, and performance results).</li>

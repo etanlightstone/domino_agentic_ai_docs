@@ -57,15 +57,19 @@
   </ol>
 
 <pre><code><span class="kw">import</span> os
-<span class="kw">from</span> openai <span class="kw">import</span> OpenAI
+<span class="kw">from</span> pydantic_ai <span class="kw">import</span> Agent
+<span class="kw">from</span> pydantic_ai.models.openai <span class="kw">import</span> OpenAIChatModel
+<span class="kw">from</span> pydantic_ai.providers.openai <span class="kw">import</span> OpenAIProvider
 
 <span class="cm"># API key is read from a Domino environment variable</span>
-client = OpenAI(api_key=os.environ[<span class="str">"OPENAI_API_KEY"</span>])
+model = OpenAIChatModel(
+    <span class="str">"gpt-4o"</span>,
+    provider=OpenAIProvider(api_key=os.environ[<span class="str">"OPENAI_API_KEY"</span>]),
+)
+agent = Agent(model)
 
-response = client.chat.completions.create(
-    model=<span class="str">"gpt-4o"</span>,
-    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello"</span>}]
-)</code></pre>
+result = agent.run_sync(<span class="str">"Hello"</span>)
+print(result.output)</code></pre>
 
   <div class="info">
     <p><strong>Swapping models during experimentation.</strong> One advantage of external providers is that switching models is a configuration change, not an infrastructure change. When you iterate on your agent during <a href="develop.html">development</a>, you can swap between models (e.g., GPT-4o vs. Claude 3.5) by changing a value in your YAML agent config &mdash; no redeployment needed.</p>
@@ -75,7 +79,7 @@ response = client.chat.completions.create(
 
   <p>If you need to run your own model &mdash; for data residency, cost control, or to use a fine-tuned model &mdash; Domino can host it as a Model API. Your agent code calls the Domino-hosted endpoint the same way it would call any other API.</p>
 
-  <p>See <a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> for the full setup guide, including:</p>
+  <p>See <a href="llm-deploy.html">Register and deploy LLMs</a> for the full setup guide, including:</p>
 
   <ul>
     <li>Registering a model from Hugging Face or a custom checkpoint</li>
@@ -90,7 +94,7 @@ response = client.chat.completions.create(
   <div class="next-steps">
     <h2>Next steps</h2>
     <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Instrument your agent code with tracing and evaluation</div>
-    <div class="next-link"><a href="https://docs.dominodatalab.com/en/cloud/user_guide/e7befd/register-and-deploy-llms/">Register and deploy LLMs</a> &mdash; Host your own model in Domino</div>
+    <div class="next-link"><a href="llm-deploy.html">Register and deploy LLMs</a> &mdash; Host your own model in Domino</div>
   </div>
 
 </main>

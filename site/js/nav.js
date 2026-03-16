@@ -8,6 +8,7 @@
     { label: "Experiment Manager", href: "/pages/experiment.html", sub: true },
     { label: "Deploy agentic systems", href: "/pages/deploy.html", sub: true },
     { label: "Monitor agentic systems", href: "/pages/monitor.html", sub: true },
+    { label: "Register and deploy LLMs", href: "/pages/llm-deploy.html", sub: true },
     { heading: "API Reference" },
     { label: "Python SDK: Agents", href: "/pages/sdk-reference.html" },
   ];

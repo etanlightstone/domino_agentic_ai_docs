@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="..">
+  <title>Register and deploy LLMs | Domino Docs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <span>domino</span>
+    <span class="version">Cloud</span>
+  </div>
+  <nav class="topbar-tabs">
+    <a href="#" class="active">User Guide</a>
+    <a href="#">Admin Guide</a>
+    <a href="sdk-reference.html">API Guide</a>
+    <a href="#">Release Notes</a>
+  </nav>
+</header>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="content">
+  <h1>Register and deploy LLMs</h1>
+
+  <p class="lead">Domino lets you register large language models (LLMs) and deploy them as hosted endpoints with optimized inference. These endpoints provide OpenAI-compatible APIs that your agentic systems and applications can call directly.</p>
+
+  <p>You can register models from Hugging Face or from your <a href="https://docs.dominodatalab.com/en/cloud/user_guide/da707d/track-and-monitor-experiments/">experiment runs</a>, then deploy them as endpoints. You'll need Project Collaborator permissions to register models and create endpoints.</p>
+
+  <h2>Plan your endpoint deployment</h2>
+
+  <p>Before creating an endpoint, consider these key factors to ensure optimal performance and cost-efficiency:</p>
+
+  <h3>Understand your model's requirements</h3>
+
+  <p>Check your model's documentation for minimum memory and compute requirements. Choose <a href="https://apxml.com/tools/vram-calculator">appropriate resource sizes</a> based on requirements and expected usage patterns.</p>
+
+  <h3>Size resources appropriately for expected usage</h3>
+
+  <p>Account for concurrent users: if you expect high throughput or multiple simultaneous requests, minimal GPU sizes may cause slowdowns. Scale up the hardware tier or consider deploying multiple endpoints.</p>
+
+  <p>Balance performance against cost. Start with a tier that meets your requirements and monitor performance before scaling up.</p>
+
+  <div class="info">
+    <p><strong>GPU is required.</strong> LLM inference is compute-intensive. Always select a GPU-enabled hardware tier for your endpoint. CPU-only tiers will not provide acceptable latency for model serving. Choose a tier with enough GPU memory (VRAM) to hold your model's weights &mdash; for example, a 7B-parameter model typically needs at least 16 GB of VRAM.</p>
+  </div>
+
+  <h2>Step 1: Register a model</h2>
+
+  <p>Register a model to make it available for deployment as an endpoint. Go to <strong>Models &gt; Register</strong> to get started.</p>
+
+  <p>Choose your model source:</p>
+
+  <ul>
+    <li><strong>Hugging Face</strong> models that you have access to, or</li>
+    <li><strong>Experiment runs</strong> that include a <a href="https://docs.dominodatalab.com/en/cloud/user_guide/3b6ae5/manage-models-with-model-registry/">logged MLflow model</a>.</li>
+  </ul>
+
+  <p>Complete the required fields.</p>
+
+  <div class="screenshot-placeholder">
+    <strong>Register model form</strong>
+    UI screenshot: the model registration form showing model source selection (Hugging Face / Experiment run) and required fields.
+  </div>
+
+  <h2>Step 2: Create an endpoint</h2>
+
+  <p>After registering a model, you can deploy it as an endpoint. From your registered model's <strong>Endpoints</strong> tab, click <strong>Create endpoint</strong>.</p>
+
+  <p>Complete the endpoint configuration details:</p>
+
+  <ol>
+    <li>Choose a name and description for the endpoint.</li>
+    <li>Under <strong>Environment</strong>, select <strong>Domino vLLM Environment</strong>. This environment is pre-configured with the vLLM runtime, which provides optimized inference and an OpenAI-compatible API out of the box.</li>
+    <li>Under <strong>Hardware Tier</strong>, select a <strong>GPU-enabled</strong> resource size. Match the GPU memory to your model's requirements &mdash; larger models need more VRAM. For example, use a tier with at least 24&nbsp;GB GPU memory for 13B+ parameter models.</li>
+    <li>Configure access controls by adding users or organizations for access to this endpoint.</li>
+  </ol>
+
+  <div class="screenshot-placeholder">
+    <strong>Create endpoint form</strong>
+    UI screenshot: the endpoint creation wizard showing environment selection (Domino vLLM Environment highlighted), hardware tier picker, and access controls.
+  </div>
+
+  <div class="note">
+    <div class="note-title">Note</div>
+    <p>Some hosted models require the following settings under <strong>Configuration &gt; Advanced Tab &gt; vLLM arguments</strong> in order to work with agent frameworks that use tool calling:</p>
+    <p><code>--enable-auto-tool-choice</code></p>
+    <p><code>--tool-call-parser hermes</code></p>
+  </div>
+
+  <p>Click <strong>Create endpoint</strong>. The endpoint deploys with the vLLM runtime, which provides optimized inference performance and OpenAI-compatible APIs.</p>
+
+  <h2>Step 3: Get your endpoint URL and call it from an agent</h2>
+
+  <p>Once your endpoint is running, navigate to the <strong>Calling</strong> tab on the endpoint detail page. This tab provides:</p>
+
+  <ul>
+    <li>The endpoint <strong>URL</strong> &mdash; this is the <code>base_url</code> your agent code will use.</li>
+    <li>A <strong>Code snippet</strong> showing how to connect using the OpenAI Python SDK.</li>
+  </ul>
+
+  <div class="diagram">
+    <img src="../assets/call_llm_endpoint.jpg" alt="Endpoint Calling tab showing the endpoint URL and a Python code snippet for connecting with the OpenAI SDK.">
+  </div>
+
+  <p>Copy the URL from the Calling tab. Inside a Domino workspace or Job, the API key is available automatically at <code>http://localhost:8899/access-token</code>. Use these values to connect your agent to the Domino-hosted model.</p>
+
+  <h3>Use the endpoint from a Pydantic AI agent</h3>
+
+  <p>Domino endpoints are OpenAI-compatible, so you can use the <code>OpenAIProvider</code> from Pydantic AI with a custom <code>base_url</code> pointing to your endpoint:</p>
+
+<pre><code><span class="kw">import</span> os
+<span class="kw">import</span> requests
+<span class="kw">from</span> pydantic_ai <span class="kw">import</span> Agent
+<span class="kw">from</span> pydantic_ai.models.openai <span class="kw">import</span> OpenAIChatModel
+<span class="kw">from</span> pydantic_ai.providers.openai <span class="kw">import</span> OpenAIProvider
+
+<span class="cm"># Copy the URL from the Calling tab of your endpoint</span>
+ENDPOINT_URL = os.environ[<span class="str">"DOMINO_LLM_ENDPOINT_URL"</span>]
+
+<span class="cm"># Inside Domino, the access token is available at this local URL</span>
+API_KEY = requests.get(<span class="str">"http://localhost:8899/access-token"</span>).text
+
+model = OpenAIChatModel(
+    <span class="str">"your-model-name"</span>,
+    provider=OpenAIProvider(base_url=ENDPOINT_URL, api_key=API_KEY),
+)
+agent = Agent(model)
+
+result = agent.run_sync(<span class="str">"Summarize the latest quarterly report."</span>)
+print(result.output)</code></pre>
+
+  <div class="info">
+    <p><strong>Storing the endpoint URL.</strong> Rather than hard-coding the URL, store it as a <a href="llm-setup.html">Domino environment variable</a> (e.g., <code>DOMINO_LLM_ENDPOINT_URL</code>). This lets you swap endpoints without changing code &mdash; useful when promoting from a dev endpoint to a production one.</p>
+  </div>
+
+  <h3>Use the endpoint with the OpenAI SDK directly</h3>
+
+  <p>If you prefer calling the endpoint without a framework, use the standard OpenAI Python client:</p>
+
+<pre><code><span class="kw">import</span> os
+<span class="kw">import</span> requests
+<span class="kw">from</span> openai <span class="kw">import</span> OpenAI
+
+ENDPOINT_URL = os.environ[<span class="str">"DOMINO_LLM_ENDPOINT_URL"</span>]
+API_KEY = requests.get(<span class="str">"http://localhost:8899/access-token"</span>).text
+
+client = OpenAI(base_url=ENDPOINT_URL, api_key=API_KEY)
+
+response = client.chat.completions.create(
+    model=<span class="str">"your-model-name"</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello"</span>}]
+)
+print(response.choices[<span class="op">0</span>].message.content)</code></pre>
+
+  <h2>Step 4: Monitor endpoint performance</h2>
+
+  <p>After deploying your endpoint, you can monitor its performance and usage from the endpoint detail page:</p>
+
+  <ul>
+    <li><strong>Overview</strong>: Configuration details and deployment status</li>
+    <li><strong>Performance</strong>: Token usage and latency metrics over time</li>
+    <li><strong>Usage</strong>: Endpoint invocation frequency</li>
+  </ul>
+
+  <div class="screenshot-placeholder">
+    <strong>Endpoint performance dashboard</strong>
+    UI screenshot: the Performance tab showing token throughput and latency charts.
+  </div>
+
+  <p><a href="https://docs.dominodatalab.com/en/cloud/user_guide/e891f3/monitor-model-endpoints/">Monitor model endpoint performance</a> has more detailed information about using monitoring capabilities during model development and after deployment to make sure your models perform efficiently and reliably in production environments.</p>
+
+  <h2>Troubleshoot common issues</h2>
+
+  <table>
+    <thead>
+      <tr><th>Problem</th><th>Solution</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hugging Face model not appearing in the list</td>
+        <td>Verify you have access to the model. Some models require accepting license agreements on Hugging Face before they're available in Domino.</td>
+      </tr>
+      <tr>
+        <td>Endpoint stuck in "Starting" status</td>
+        <td>Check that the model size is compatible with your selected hardware tier. Large models may need more GPU memory. Review endpoint logs for specific error messages.</td>
+      </tr>
+      <tr>
+        <td>Slow response times or timeouts</td>
+        <td>Monitor the Performance tab to identify latency patterns. If concurrent requests exceed your resource capacity, consider scaling to a larger hardware tier or deploying additional endpoints.</td>
+      </tr>
+      <tr>
+        <td>Users can't access the endpoint</td>
+        <td>Verify users or their organizations were added to the endpoint's access controls and that users have the required project permissions.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="next-steps">
+    <h2>Next steps</h2>
+    <div class="next-link"><a href="llm-setup.html">Set up LLM access</a> &mdash; Configure external providers or choose between hosting approaches</div>
+    <div class="next-link"><a href="develop.html">Develop agentic systems</a> &mdash; Instrument your agent code with tracing and evaluation</div>
+    <div class="next-link"><a href="monitor.html">Monitor agentic systems</a> &mdash; Track production performance</div>
+  </div>
+
+</main>
+
+<script src="../js/nav.js"></script>
+</body>
+</html>
